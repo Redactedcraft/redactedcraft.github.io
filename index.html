@@ -185,38 +185,7 @@
             border-bottom: 4px solid #444;
         }
 
-        #model-viewer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: #000;
-            padding: 20px;
-            border: 4px solid var(--primary);
-            margin-top: 20px;
-        }
-
         #three-canvas { width: 100%; height: 500px; cursor: move; }
-
-        .model-controls {
-            margin-top: 20px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .model-btn {
-            background: #333;
-            color: white;
-            border: 2px solid #555;
-            padding: 8px 12px;
-            font-family: 'Press Start 2P';
-            font-size: 0.5rem;
-            cursor: pointer;
-        }
-
-        .model-btn:hover { background: var(--primary); }
-        .model-btn.active { background: var(--primary); border-color: white; }
 
         .modal {
             display: none;
@@ -549,46 +518,6 @@
 
         function closeModal() { document.getElementById('textureModal').style.display = "none"; }
 
-        let scene, camera, renderer, cube;
-        function initThree() {
-            if (scene) return; 
-            const container = document.getElementById('three-canvas');
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-            scene.add(new THREE.AmbientLight(0xffffff, 1.0));
-            camera.position.z = 2; camera.position.y = 1; camera.lookAt(0,0,0);
-            loadModel('grass');
-            animate();
-            const btnContainer = document.getElementById('model-buttons');
-            textureData.filter(b => b.cat !== 'legacy' && b.cat !== 'hd').forEach(b => {
-                const btn = document.createElement('button');
-                btn.className = 'model-btn';
-                btn.innerText = b.name;
-                btn.onclick = () => loadModel(b.id);
-                btnContainer.appendChild(btn);
-            });
-        }
-
-        .png`);
-            texture.magFilter = texture.minFilter = THREE.NearestFilter;
-            const uvs = new Float32Array([
-                0, 1, 0.333, 1, 0, 0.5, 0.333, 0.5,
-                0.333, 0.5, 0.666, 0.5, 0.333, 0, 0.666, 0,
-                0.666, 1, 1, 1, 0.666, 0.5, 1, 0.5,
-                0, 0.5, 0.333, 0.5, 0, 0, 0.333, 0,
-                0.333, 1, 0.666, 1, 0.333, 0.5, 0.666, 0.5,
-                0.666, 0.5, 1, 0.5, 0.666, 0, 1, 0
-            ]);
-            const geometry = new THREE.BoxGeometry(1, 1, 1);
-            geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
-            cube = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ map: texture, transparent: true }));
-            scene.add(cube);
-        }
-
-        function animate() { requestAnimationFrame(animate); if(cube) cube.rotation.y += 0.01; renderer.render(scene, camera); }
         populateGalleries();
     </script>
 
