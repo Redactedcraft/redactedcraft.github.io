@@ -102,12 +102,18 @@
 
         .block-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 25px;
         }
 
         .block-item {
             background: #333;
+            background-image: linear-gradient(45deg, #2a2a2a 25%, transparent 25%), 
+                              linear-gradient(-45deg, #2a2a2a 25%, transparent 25%), 
+                              linear-gradient(45deg, transparent 75%, #2a2a2a 75%), 
+                              linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             padding: 20px;
             border: 4px solid #444;
             text-align: center;
@@ -117,8 +123,8 @@
         }
 
         .block-item:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0px #000; border-color: var(--primary); }
-        .block-item img { width: 96px; height: 96px; image-rendering: pixelated; margin-bottom: 15px; background: rgba(0,0,0,0.2); }
-        .block-item span { display: block; font-family: 'Press Start 2P'; font-size: 0.6rem; color: var(--accent); }
+        .block-item img { width: 128px; height: 128px; image-rendering: pixelated; margin-bottom: 15px; }
+        .block-item span { display: block; font-family: 'Press Start 2P'; font-size: 0.7rem; color: var(--accent); }
 
         /* 3D Viewer */
         #model-viewer-container {
@@ -238,7 +244,7 @@
         <!-- TEXTURES TAB -->
         <div id="assets" class="tab-content">
             <h2>Standard Block Library</h2>
-            <p>Our textures utilize 16x16 pixel grids with no interpolation, ensuring maximum sharpness.</p>
+            <p>Our textures utilize 16x16 pixel grids with no interpolation, ensuring maximum sharpness. Backgrounds shown are checkerboard to highlight transparency.</p>
             
             <h3 class="category-title">Natural Resources</h3>
             <div class="block-gallery" id="nat-gallery"></div>
@@ -253,7 +259,7 @@
         <!-- MODELS TAB -->
         <div id="models" class="tab-content">
             <h2>3D Model Inspector</h2>
-            <p>Rotate and inspect the geometry of our block types. This viewer uses the same logic as our in-game mesher.</p>
+            <p>Rotate and inspect the geometry of our block types. This viewer uses exact UV mapping from the 3x2 cube-net textures.</p>
             
             <div id="model-viewer-container">
                 <div id="three-canvas"></div>
@@ -365,14 +371,19 @@ elements.Add(new BlockModelElement {
             if(tabName === 'models') initThree();
         }
 
-        function openModal(src, name, desc) { document.getElementById('textureModal').style.display = "flex"; document.getElementById('modalImg').src = src; document.getElementById('modalName').innerText = name; document.getElementById('modalDesc').innerText = desc; }
+        function openModal(src, name, desc) {
+            document.getElementById('textureModal').style.display = "flex";
+            document.getElementById('modalImg').src = src;
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalDesc').innerText = desc;
+        }
 
         function closeModal() { document.getElementById('textureModal').style.display = "none"; }
 
         /* THREE.JS 3D Logic */
         let scene, camera, renderer, cube;
         function initThree() {
-            if (scene) return; // Only init once
+            if (scene) return; 
             const container = document.getElementById('three-canvas');
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -390,7 +401,6 @@ elements.Add(new BlockModelElement {
             loadModel('grass');
             animate();
 
-            // Populate buttons
             const btnContainer = document.getElementById('model-buttons');
             blocks.forEach(b => {
                 const btn = document.createElement('button');
@@ -408,12 +418,40 @@ elements.Add(new BlockModelElement {
         function loadModel(id) {
             if(cube) scene.remove(cube);
             const loader = new THREE.TextureLoader();
-            const texture = loader.load(`assets/img/${id}.png`);
-            texture.magFilter = THREE.NearestFilter;
-            texture.minFilter = THREE.NearestFilter;
+            const texture = loader.load(`assets/img/${id}.png`, (tex) => {
+                // Ensure correct filtering
+                tex.magFilter = THREE.NearestFilter;
+                tex.minFilter = THREE.NearestFilter;
+                tex.needsUpdate = true;
+            });
+
+            // 3x2 Cube Net Layout UV Mapping
+            // Row 0 (Top): [0.5, 1.0]
+            // Row 1 (Bottom): [0, 0.5]
+            // Col 0: [0, 0.333], Col 1: [0.333, 0.666], Col 2: [0.666, 1.0]
+            
+            // UV Order in BoxGeometry: 
+            // 0: Right (PosX), 1: Left (NegX), 2: Top (PosY), 3: Bottom (NegY), 4: Front (PosZ), 5: Back (NegZ) 
+            
+            const uvs = new Float32Array([
+                // PosX: (0,0) Top Row, 1st Col
+                0, 1,  0.333, 1,  0, 0.5,  0.333, 0.5,
+                // NegX: (1,1) Bottom Row, 2nd Col
+                0.333, 0.5,  0.666, 0.5,  0.333, 0,  0.666, 0,
+                // PosY: (2,0) Top Row, 3rd Col
+                0.666, 1,  1, 1,  0.666, 0.5,  1, 0.5,
+                // NegY: (0,1) Bottom Row, 1st Col
+                0, 0.5,  0.333, 0.5,  0, 0,  0.333, 0,
+                // PosZ: (1,0) Top Row, 2nd Col
+                0.333, 1,  0.666, 1,  0.333, 0.5,  0.666, 0.5,
+                // NegZ: (2,1) Bottom Row, 3rd Col
+                0.666, 0.5,  1, 0.5,  0.666, 0,  1, 0
+            ]);
 
             const geometry = new THREE.BoxGeometry(1, 1, 1);
-            const material = new THREE.MeshStandardMaterial({ map: texture, transparent: true });
+            geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+            
+            const material = new THREE.MeshStandardMaterial({ map: texture, transparent: true, side: THREE.DoubleSide });
             cube = new THREE.Mesh(geometry, material);
             scene.add(cube);
         }
