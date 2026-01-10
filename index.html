@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redactedcraft | Official Site</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
             --primary: #4e9a06;
@@ -38,7 +39,7 @@
         }
 
         header {
-            height: 40vh;
+            height: 35vh;
             background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/img/hero_bg.png');
             background-size: cover;
             background-position: center;
@@ -53,7 +54,7 @@
 
         .logo {
             image-rendering: pixelated;
-            max-width: 300px;
+            max-width: 280px;
             margin-bottom: 10px;
         }
 
@@ -67,13 +68,14 @@
             top: 0;
             z-index: 100;
             border-bottom: 4px solid var(--primary-dark);
+            flex-wrap: wrap;
         }
 
         .tab-link {
             font-family: 'Press Start 2P', cursive;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #888;
-            padding: 12px 20px;
+            padding: 12px 15px;
             cursor: pointer;
             text-decoration: none;
             border: none;
@@ -81,192 +83,142 @@
             transition: color 0.2s;
         }
 
-        .tab-link:hover {
-            color: var(--text-light);
-        }
-
-        .tab-link.active {
-            color: var(--primary);
-            border-bottom: 4px solid var(--primary);
-        }
+        .tab-link:hover { color: var(--text-light); }
+        .tab-link.active { color: var(--primary); border-bottom: 4px solid var(--primary); }
 
         /* Tab Content */
-        .tab-content {
-            display: none;
-            padding: 40px 0;
-            animation: fadeIn 0.3s;
-        }
+        .tab-content { display: none; padding: 40px 0; animation: fadeIn 0.3s; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { background: var(--panel-bg); padding: 25px; border: 4px solid #444; box-shadow: 8px 8px 0px #000; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .card {
-            background: var(--panel-bg);
-            padding: 25px;
-            border: 4px solid #444;
-            box-shadow: 8px 8px 0px #000;
-        }
-
+        /* Enhanced Gallery */
         .block-gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
         }
 
         .block-item {
             background: #333;
-            padding: 10px;
+            padding: 15px;
             border: 2px solid #555;
             text-align: center;
+            cursor: pointer;
+            transition: transform 0.1s, border-color 0.2s;
         }
 
-        .block-item img {
-            width: 100%;
+        .block-item:hover { transform: scale(1.05); border-color: var(--primary); }
+        .block-item img { width: 64px; height: 64px; image-rendering: pixelated; margin-bottom: 10px; }
+        .block-item span { display: block; font-family: 'Press Start 2P'; font-size: 0.5rem; color: var(--accent); }
+
+        /* Modal / Lightbox */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .modal-content {
+            max-width: 80%;
+            max-height: 70%;
             image-rendering: pixelated;
+            border: 8px solid #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        pre {
-            background: #000;
-            padding: 20px;
-            border-radius: 5px;
-            overflow-x: auto;
-            border-left: 5px solid var(--primary);
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-        }
+        .modal-info { text-align: center; margin-top: 20px; padding: 0 20px; }
+        .modal-info h3 { margin: 0; color: var(--accent); font-size: 1.5rem; }
+        .modal-info p { color: #ccc; font-size: 1.2rem; }
+        .close-modal { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; }
 
-        .media-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .media-item img {
-            width: 100%;
-            border: 4px solid #444;
-            image-rendering: pixelated;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            background: #111;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 50px;
-        }
-
-        footer a { color: var(--primary); text-decoration: none; margin: 0 10px; }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--primary);
-            color: white;
+        /* Social Icons */
+        .social-links { display: flex; gap: 20px; margin-top: 20px; }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             padding: 10px 20px;
+            background: #333;
+            border: 3px solid #444;
+            color: white;
             text-decoration: none;
-            font-family: 'Press Start 2P', cursive;
+            font-family: 'Press Start 2P';
             font-size: 0.7rem;
-            border: 4px solid var(--primary-dark);
-            box-shadow: 4px 4px 0px #000;
+            transition: background 0.2s;
         }
+        .social-btn i { font-size: 1.2rem; }
+        .social-btn.youtube:hover { background: #FF0000; border-color: #cc0000; }
+        .social-btn.twitch:hover { background: #9146FF; border-color: #772ce8; }
+
+        pre { background: #000; padding: 20px; border-radius: 5px; overflow-x: auto; border-left: 5px solid var(--primary); font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; }
+        footer { text-align: center; padding: 40px; background: #111; font-size: 0.9rem; color: #666; margin-top: 50px; }
+        footer a { color: var(--primary); text-decoration: none; margin: 0 10px; }
+        .btn { display: inline-block; background-color: var(--primary); color: white; padding: 10px 20px; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; border: 4px solid var(--primary-dark); box-shadow: 4px 4px 0px #000; }
     </style>
 </head>
 <body>
 
     <header>
         <img src="assets/img/logo.png" alt="Redactedcraft Logo" class="logo">
-        <p style="font-family: 'Press Start 2P'; font-size: 1rem;">Official Developer Portal</p>
+        <p style="font-family: 'Press Start 2P'; font-size: 0.9rem;">The Ultimate Voxel Sandbox</p>
     </header>
 
     <nav class="tabs-nav">
         <button class="tab-link active" onclick="openTab(event, 'home')">HOME</button>
-        <button class="tab-link" onclick="openTab(event, 'assets')">ASSETS</button>
-        <button class="tab-link" onclick="openTab(event, 'media')">MEDIA</button>
-        <button class="tab-link" onclick="openTab(event, 'coding')">CODING</button>
+        <button class="tab-link" onclick="openTab(event, 'assets')">TEXTURES</button>
+        <button class="tab-link" onclick="openTab(event, 'coding')">DEV LOG</button>
+        <button class="tab-link" onclick="openTab(event, 'about')">ABOUT ME</button>
     </nav>
 
     <div class="container">
         
         <!-- HOME TAB -->
         <div id="home" class="tab-content active">
-            <h2>Welcome to Redactedcraft</h2>
-            <p>Redactedcraft is a high-performance voxel engine built with C# and MonoGame. Our philosophy focuses on <strong>pixel art purity</strong> and modular architecture.</p>
+            <h2>Voxel Sandbox Reinvented</h2>
+            <p>Redactedcraft is a high-performance voxel engine built with C# and MonoGame. Experience a world where every pixel counts, powered by custom-built rendering and networking technology.</p>
             <div class="grid">
                 <div class="card">
-                    <h3>🚀 Performance</h3>
-                    <p>Utilizing custom Greedy Meshing algorithms to ensure smooth frame rates even at high render distances.</p>
+                    <h3>🚀 Engine</h3>
+                    <p>Optimized C# code using advanced greedy meshing for high-performance rendering.</p>
                 </div>
                 <div class="card">
-                    <h3>🌐 Multiplayer</h3>
-                    <p>Integrated with Epic Online Services for easy P2P connectivity and friend management.</p>
+                    <h3>🎨 Art</h3>
+                    <p>Consistent 16x16 pixel art aesthetic with sharp, nearest-neighbor scaling.</p>
                 </div>
             </div>
             <div style="text-align: center; margin-top: 40px;">
-                <a href="https://github.com/Redacted480/Redactedcraft-Assets/releases" class="btn">Get Latest Assets</a>
+                <a href="https://github.com/Redacted480/Redactedcraft-Assets/releases" class="btn">DOWNLOAD ASSET PACKS</a>
             </div>
         </div>
 
-        <!-- ASSETS TAB -->
+        <!-- TEXTURES TAB -->
         <div id="assets" class="tab-content">
-            <h2>Visual Assets</h2>
-            <p>Our block textures are designed for a 16x16 grid, ensuring a consistent and sharp pixel art style across the entire world.</p>
-            <div class="block-gallery">
-                <div class="block-item"><img src="assets/img/grass.png"></div>
-                <div class="block-item"><img src="assets/img/dirt.png"></div>
-                <div class="block-item"><img src="assets/img/stone.png"></div>
-                <div class="block-item"><img src="assets/img/wood.png"></div>
-                <div class="block-item"><img src="assets/img/leaves.png"></div>
-                <div class="block-item"><img src="assets/img/plank.png"></div>
-                <div class="block-item"><img src="assets/img/sand.png"></div>
-                <div class="block-item"><img src="assets/img/gravel.png"></div>
-                <div class="block-item"><img src="assets/img/diamond.png"></div>
-                <div class="block-item"><img src="assets/img/gold.png"></div>
-                <div class="block-item"><img src="assets/img/iron.png"></div>
-                <div class="block-item"><img src="assets/img/coal.png"></div>
-                <div class="block-item"><img src="assets/img/crafting_table.png"></div>
-                <div class="block-item"><img src="assets/img/chest.png"></div>
-                <div class="block-item"><img src="assets/img/glass.png"></div>
-                <div class="block-item"><img src="assets/img/door.png"></div>
+            <h2>Block Atlas</h2>
+            <p>Click a block to view it in full detail and see its description.</p>
+            <div class="block-gallery" id="texture-gallery">
+                <!-- Items populated via script -->
             </div>
-        </div>
-
-        <!-- MEDIA TAB -->
-        <div id="media" class="tab-content">
-            <h2>Gallery & Screenshots</h2>
-            <div class="media-grid">
-                <div class="media-item">
-                    <img src="assets/img/hero_bg.png" alt="Main Menu">
-                    <p>Main Menu Environment</p>
-                </div>
-                <!-- Future screenshots can be added here -->
-            </div>
-            <p style="color: #666; font-style: italic;">More screenshots coming soon as development progresses.</p>
         </div>
 
         <!-- CODING TAB -->
         <div id="coding" class="tab-content">
-            <h2>Technical Implementation</h2>
-            <p>Showcasing the engine's core systems and unique implementation details.</p>
-            
-            <h3>🏗️ Block Modeling</h3>
-            <p>Our custom JSON-based modeling system allows for complex block shapes while maintaining voxel efficiency.</p>
+            <h2>Dev Logs & Logic</h2>
+            <h3>🏗️ 3D Model Logic</h3>
+            <p>Our custom JSON-based modeling system allows for complex block shapes like doors with protruding 3D knobs.</p>
             <pre>
-// 3D Door Model with Protruding Knob
+// 3D Door Model Definition
 private static BlockModel CreateDoorModel(bool open) {
     var elements = new List&lt;BlockModelElement&gt;();
-    // Door Slab
+    // Main Door Slab
     elements.Add(new BlockModelElement {
         From = Vector3.Zero,
         To = open ? new Vector3(2, 32, 16) : new Vector3(16, 32, 2)
@@ -279,17 +231,37 @@ private static BlockModel CreateDoorModel(bool open) {
     return new BlockModel(elements, display, new Vector2(48, 32));
 }
             </pre>
-
-            <h3>⚙️ Quality Presets</h3>
-            <p>Nearest-neighbor filtering is enforced across all quality levels to preserve the pixelated aesthetic.</p>
-            <pre>
-"ULTRA" => new SamplerState { 
-    Filter = TextureFilter.Point, 
-    MipMapLevelOfDetailBias = 0.0f 
-}
-            </pre>
         </div>
 
+        <!-- ABOUT TAB -->
+        <div id="about" class="tab-content">
+            <h2>About the Creator</h2>
+            <p>Redactedcraft is currently a <strong>solo project</strong> being developed for fun and to push the limits of what a C# voxel engine can do.</p>
+            
+            <div class="card" style="margin-top: 30px;">
+                <h3>Stay Connected</h3>
+                <p>Follow the development and see more content on my social platforms:</p>
+                <div class="social-links">
+                    <a href="https://www.youtube.com/redacted1" class="social-btn youtube" target="_blank">
+                        <i class="fab fa-youtube"></i> Redacted's YouTube
+                    </a>
+                    <a href="https://www.twitch.tv/redactedreal" class="social-btn twitch" target="_blank">
+                        <i class="fab fa-twitch"></i> Twitch
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal for Lightbox -->
+    <div id="textureModal" class="modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div class="modal-info">
+            <h3 id="modalName"></h3>
+            <p id="modalDesc"></p>
+        </div>
     </div>
 
     <footer>
@@ -297,11 +269,46 @@ private static BlockModel CreateDoorModel(bool open) {
         <p>
             <a href="privacy.html">Privacy Policy</a> | 
             <a href="terms.html">Terms of Service</a> | 
-            <a href="https://github.com/Redacted480/RedactedcraftCsharp">Source Code</a>
+            <a href="https://github.com/Redacted480/RedactedcraftCsharp">GitHub</a>
         </p>
     </footer>
 
     <script>
+        const textureData = [
+            { id: 'grass', name: 'Grass', desc: 'The foundation of any lush landscape.' },
+            { id: 'dirt', name: 'Dirt', desc: 'Rich soil, perfect for planting.' },
+            { id: 'stone', name: 'Stone', desc: 'Hard and durable, the bedrock of construction.' },
+            { id: 'wood', name: 'Wood', desc: 'Strong timber from the local forests.' },
+            { id: 'leaves', name: 'Leaves', desc: 'Greenery that breathes life into the world.' },
+            { id: 'plank', name: 'Plank', desc: 'Processed wood for refined building.' },
+            { id: 'sand', name: 'Sand', desc: 'Gritty and shifting, found near water.' },
+            { id: 'gravel', name: 'Gravel', desc: 'Loose stones that crunch underfoot.' },
+            { id: 'diamond', name: 'Diamond', desc: 'Rare and precious gems of the deep.' },
+            { id: 'gold', name: 'Gold', desc: 'Shiny ore for the truly wealthy.' },
+            { id: 'iron', name: 'Iron', desc: 'Essential metal for tools and industry.' },
+            { id: 'coal', name: 'Coal', desc: 'The primary fuel for warmth and smelting.' },
+            { id: 'crafting_table', name: 'Crafting Table', desc: 'Where raw materials become useful tools.' },
+            { id: 'chest', name: 'Chest', desc: 'Store your treasures safely.' },
+            { id: 'glass', name: 'Glass', desc: 'Fragile transparency for your windows.' },
+            { id: 'door', name: 'Door', desc: 'A gateway between safety and the wild.' },
+            { id: 'water', name: 'Water', desc: 'Flowing life that fills the lowlands.' },
+            { id: 'bedrock', name: 'Bedrock', desc: 'Indestructible layer at the edge of the world.' }
+        ];
+
+        function populateGallery() {
+            const container = document.getElementById('texture-gallery');
+            textureData.forEach(block => {
+                const div = document.createElement('div');
+                div.className = 'block-item';
+                div.onclick = () => openModal(`assets/img/${block.id}.png`, block.name, block.desc);
+                div.innerHTML = `
+                    <img src="assets/img/${block.id}.png" alt="${block.name}">
+                    <span>${block.name}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -317,6 +324,19 @@ private static BlockModel CreateDoorModel(bool open) {
             document.getElementById(tabName).className += " active";
             evt.currentTarget.className += " active";
         }
+
+        function openModal(src, name, desc) {
+            document.getElementById('textureModal').style.display = "flex";
+            document.getElementById('modalImg').src = src;
+            document.getElementById('modalName').innerText = name;
+            document.getElementById('modalDesc').innerText = desc;
+        }
+
+        function closeModal() {
+            document.getElementById('textureModal').style.display = "none";
+        }
+
+        populateGallery();
     </script>
 
 </body>
