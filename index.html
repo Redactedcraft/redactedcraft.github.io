@@ -279,6 +279,18 @@
         <!-- CODING TAB -->
         <div id="coding" class="tab-content">
             <h2>Dev Logs</h2>
+
+            <h3>🪟 Window Focus & UX Fix (Jan 2026)</h3>
+            <p>Resolved an issue where the launcher and game windows would start behind other applications. We implemented a combination of WinForms <code>TopMost</code> properties and Win32 <code>SetForegroundWindow</code> P/Invoke calls to ensure a smooth startup experience.</p>
+            <pre>
+// Launcher Focus Logic
+this.TopMost = true;
+this.Load += (s, e) => {
+    this.Activate();
+    Task.Delay(500).ContinueWith(_ => Invoke(() => this.TopMost = false));
+};
+            </pre>
+
             <h3>🏗️ Custom 3D Door Logic</h3>
             <p>Unlike standard blocks, doors require a custom coordinate space to handle the protruding knob and proper hinge rotation.</p>
             <pre>
