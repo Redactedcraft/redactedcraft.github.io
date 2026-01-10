@@ -332,11 +332,11 @@
             <div id="log-game" class="sub-content active">
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>🛡️ Rendering: Draw Stability Fix</h3>
+                        <h3>🧊 Engine: GLB (glTF Binary) Model Support</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
-                        <p>Resolved a critical rendering crash (<code>System.ArgumentOutOfRangeException</code>) that occurred when the engine attempted to draw an item or block with zero vertices. We've added robust validation checks to the <code>FirstPersonHandRenderer</code> and custom block drawing logic to ensure the GPU only receives valid geometry data.</p>
+                        <p>Transitioned the block modeling system from JSON to the industry-standard <strong>GLB (glTF 2.0 Binary)</strong> format. This shift allows for more complex geometry, better performance through binary data loading, and seamless compatibility with professional 3D tools. The first asset to utilize this new system is the updated door model.</p>
                     </div>
                 </div>
 
