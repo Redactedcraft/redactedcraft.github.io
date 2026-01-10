@@ -332,13 +332,95 @@
             <div id="log-game" class="sub-content active">
                 <div class="log-entry">
                     <div class="log-header">
+                        <h3>🧊 Engine: GLB (glTF Binary) Model Support</h3>
+                        <span class="log-date">JAN 10, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Transitioned the block modeling system to support the industry-standard <strong>GLB (glTF 2.0 Binary)</strong> format. This shift allows for complex geometry, better performance through binary data loading, and seamless compatibility with professional 3D tools for future asset creation.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🦾 Engine: Generic JSON Model Interpreter</h3>
+                        <span class="log-date">JAN 10, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Revolutionized the block modeling system by implementing a data-driven JSON interpreter. The engine can now parse complex <code>block.json</code> files directly from the Assets folder, supporting per-element rotation, custom UV mapping, and specific display transforms for GUI and First-Person contexts.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
                         <h3>🧹 Launcher: Legacy Cleanup & Skipping</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
-                        <p>Cleaned up the launcher's mandatory asset list by removing the deprecated <code>blocks_cubenet_atlas.png</code> requirement (which the engine now generates at runtime). We also fixed a legacy URL issue and improved the skipping logic to ensure users with the latest assets aren't forced into redundant downloads.</p>
+                        <p>Cleaned up the launcher's mandatory asset list by removing the deprecated <code>blocks_cubenet_atlas.png</code> requirement. We also fixed a legacy URL issue and improved the skipping logic to ensure users with the latest assets aren't forced into redundant downloads.</p>
                     </div>
                 </div>
+
+                <div class="log-entry">
+                    <img src="assets/img/Screenshots_bg.png" class="log-image">
+                    <div class="log-header">
+                        <h3>🛠️ Asset Restoration: Screenshots Background</h3>
+                        <span class="log-date">JAN 10, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Fixed a missing UI dependency where the Screenshots management page was lacking its environmental backdrop. We've synchronized <code>Screenshots_bg.png</code> across all distribution channels to ensure UI consistency.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>⚡ Launcher: Smart Asset Sync</h3>
+                        <span class="log-date">JAN 10, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Optimized the launcher's startup routine to perform a "Smart Sync." The launcher now compares local asset tags and publication dates against the GitHub API. If your assets are already up-to-date, the download phase is skipped entirely.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🪟 Window Focus & UX Fix</h3>
+                        <span class="log-date">JAN 10, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Implemented a combination of <code>TopMost</code> timing and Win32 <code>SetForegroundWindow</code> P/Invoke to ensure both the Launcher and Game window correctly pop up on top of other applications during startup.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>📡 Multiplayer: EOS Integration</h3>
+                        <span class="log-date">JAN 05, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Completed the integration of <strong>Epic Online Services (EOS)</strong>. The game now supports cross-platform P2P networking, friend lists, and seamless session joining via host codes, alongside the classic LAN discovery system.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🏗️ World: Greedy Meshing Optimization</h3>
+                        <span class="log-date">DEC 20, 2025</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Implemented an advanced <strong>Greedy Meshing</strong> algorithm. This significantly reduces the number of draw calls by combining adjacent voxel faces into larger quads, resulting in a 400% performance increase in complex terrain.</p>
+                    </div>
+                </div>
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🚀 Project Start: The MonoGame Migration</h3>
+                        <span class="log-date">DEC 01, 2025</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Officially kicked off the transition from the legacy engine to a modern <strong>C# and MonoGame</strong> foundation. This new architecture provides better stability, easier asset management, and a robust platform for future gameplay features.</p>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- WEBSITE UPDATES -->
