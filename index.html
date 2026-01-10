@@ -254,6 +254,9 @@
 
             <h3 class="category-title">Ores & Precious Minerals</h3>
             <div class="block-gallery" id="ore-gallery"></div>
+
+            <h3 class="category-title" style="border-color: #666; color: #888;">Legacy & Archive (Failed Designs)</h3>
+            <div class="block-gallery" id="legacy-gallery"></div>
         </div>
 
         <!-- MODELS TAB -->
@@ -344,7 +347,9 @@ elements.Add(new BlockModelElement {
             { id: 'coal', name: 'Coal', cat: 'ore', desc: 'Common fuel source found in stone layers.' },
             { id: 'iron', name: 'Iron', cat: 'ore', desc: 'Essential metal for durable equipment.' },
             { id: 'gold', name: 'Gold', cat: 'ore', desc: 'Rare, heavy metal for the elite.' },
-            { id: 'diamond', name: 'Diamond', cat: 'ore', desc: 'The hardest and most precious material.' }
+            { id: 'diamond', name: 'Diamond', cat: 'ore', desc: 'The hardest and most precious material.' },
+            // Legacy
+            { id: 'legacy/grass_patchy', name: 'Patchy Grass', cat: 'legacy', desc: 'An experimental version with sparse grass coverage. Retired for a cleaner look.' }
         ];
 
         function populateGalleries() {
