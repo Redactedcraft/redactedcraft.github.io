@@ -268,7 +268,7 @@
     <nav class="tabs-nav">
         <button class="tab-link active" onclick="openTab(event, 'home')">HOME</button>
         <button class="tab-link" onclick="openTab(event, 'assets')">TEXTURES</button>
-        <button class="tab-link" onclick="openTab(event, 'models')">MODELS (3D)</button>
+        
         <button class="tab-link" onclick="openTab(event, 'coding')">DEV LOG</button>
         <button class="tab-link" onclick="openTab(event, 'about')">ABOUT ME</button>
     </nav>
@@ -308,13 +308,7 @@
             <div class="block-gallery" id="hd-gallery"></div>
         </div>
 
-        <!-- MODELS TAB -->
-        <div id="models" class="tab-content">
-            <h2>3D Model Inspector</h2>
-            <p>Rotate and inspect the geometry of our block types. This viewer uses exact UV mapping from the 3x2 cube-net textures.</p>
-            
-            <div id="model-viewer-container">
-                <div id="three-canvas"></div>
+        
                 <div class="model-controls" id="model-buttons"></div>
             </div>
         </div>
@@ -532,7 +526,7 @@
             document.getElementById(tabName).style.display = "block";
             document.getElementById(tabName).classList.add("active");
             evt.currentTarget.classList.add("active");
-            if(tabName === 'models') initThree();
+            
         }
 
         function openSubTab(evt, subName) {
@@ -578,9 +572,7 @@
             });
         }
 
-        function loadModel(id) {
-            if(cube) scene.remove(cube);
-            const texture = new THREE.TextureLoader().load(`assets/img/${id}.png`);
+        .png`);
             texture.magFilter = texture.minFilter = THREE.NearestFilter;
             const uvs = new Float32Array([
                 0, 1, 0.333, 1, 0, 0.5, 0.333, 0.5,
