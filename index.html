@@ -1,15 +1,264 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>RedactedCraft</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redactedcraft | Official Site</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4e9a06;
+            --primary-dark: #3a7304;
+            --bg-dark: #1a1a1a;
+            --panel-bg: #2d2d2d;
+            --text-light: #f0f0f0;
+            --accent: #e9b96e;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'VT323', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Press Start 2P', cursive;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        header {
+            height: 60vh;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/img/hero_bg.png');
+            background-size: cover;
+            background-position: center;
+            image-rendering: pixelated;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-bottom: 8px solid var(--primary);
+        }
+
+        .logo {
+            image-rendering: pixelated;
+            max-width: 400px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            border: 4px solid var(--primary-dark);
+            box-shadow: 4px 4px 0px #000;
+            transition: transform 0.1s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000;
+            background-color: var(--primary-dark);
+        }
+
+        /* Content Sections */
+        section {
+            padding: 60px 0;
+            border-bottom: 2px solid #333;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--panel-bg);
+            padding: 25px;
+            border: 4px solid #444;
+            box-shadow: 8px 8px 0px #000;
+        }
+
+        /* Gallery */
+        .block-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .block-item {
+            background: #333;
+            padding: 10px;
+            border: 2px solid #555;
+            text-align: center;
+            transition: scale 0.2s;
+        }
+
+        .block-item:hover {
+            scale: 1.1;
+            border-color: var(--accent);
+        }
+
+        .block-item img {
+            width: 100%;
+            image-rendering: pixelated;
+        }
+
+        .block-name {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: #aaa;
+        }
+
+        /* Code Showcase */
+        pre {
+            background: #000;
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto;
+            border-left: 5px solid var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            background: #111;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 2px 8px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>RedactedCraft</h1>
-  <p>Official site for the RedactedCraft game.</p>
-  <ul>
-    <li><a href="privacy.html">Privacy Policy</a></li>
-    <li><a href="terms.html">Terms of Service</a></li>
-  </ul>
+
+    <header>
+        <img src="assets/img/logo.png" alt="Redactedcraft Logo" class="logo">
+        <p style="font-family: 'Press Start 2P'; font-size: 1.2rem;">The Ultimate Voxel Sandbox Engine</p>
+        <a href="https://github.com/Redacted480/Redactedcraft-Assets/releases" class="btn">Download Latest Assets</a>
+    </header>
+
+    <div class="container">
+        
+        <section id="about">
+            <h2>About the Project</h2>
+            <p>Redactedcraft is a high-performance C# / MonoGame powered voxel sandbox engine. Built from the ground up with a focus on <strong>pixel art clarity</strong> and <strong>infinite customizability</strong>.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>🛠️ Tech Stack</h3>
+                    <ul>
+                        <li><strong>Language:</strong> C# 12 / .NET 8</li>
+                        <li><strong>Framework:</strong> MonoGame</li>
+                        <li><strong>Rendering:</strong> Custom Greedy Meshing Engine</li>
+                        <li><strong>Online:</strong> Epic Online Services (EOS) Integration</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🎨 Visual Identity</h3>
+                    <p>We believe in the beauty of the pixel. Our engine uses strict nearest-neighbor filtering and no mipmaps to ensure every block looks sharp, punchy, and intentional.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery">
+            <h2>Block Atlas <span class="badge">Pixel Art</span></h2>
+            <p>A showcase of our custom-crafted block textures, designed for uniform texel density and visual cohesion.</p>
+            <div class="block-gallery">
+                <div class="block-item"><img src="assets/img/grass.png"><div class="block-name">Grass</div></div>
+                <div class="block-item"><img src="assets/img/dirt.png"><div class="block-name">Dirt</div></div>
+                <div class="block-item"><img src="assets/img/stone.png"><div class="block-name">Stone</div></div>
+                <div class="block-item"><img src="assets/img/wood.png"><div class="block-name">Wood</div></div>
+                <div class="block-item"><img src="assets/img/leaves.png"><div class="block-name">Leaves</div></div>
+                <div class="block-item"><img src="assets/img/plank.png"><div class="block-name">Plank</div></div>
+                <div class="block-item"><img src="assets/img/sand.png"><div class="block-name">Sand</div></div>
+                <div class="block-item"><img src="assets/img/gravel.png"><div class="block-name">Gravel</div></div>
+                <div class="block-item"><img src="assets/img/diamond.png"><div class="block-name">Diamond</div></div>
+                <div class="block-item"><img src="assets/img/gold.png"><div class="block-name">Gold</div></div>
+                <div class="block-item"><img src="assets/img/iron.png"><div class="block-name">Iron</div></div>
+                <div class="block-item"><img src="assets/img/coal.png"><div class="block-name">Coal</div></div>
+                <div class="block-item"><img src="assets/img/crafting_table.png"><div class="block-name">Craft</div></div>
+                <div class="block-item"><img src="assets/img/chest.png"><div class="block-name">Chest</div></div>
+                <div class="block-item"><img src="assets/img/glass.png"><div class="block-name">Glass</div></div>
+                <div class="block-item"><img src="assets/img/door.png"><div class="block-name">Door</div></div>
+            </div>
+        </section>
+
+        <section id="code">
+            <h2>Development Showcase</h2>
+            <p>Our <code>BlockModel</code> system allows for complex geometry within a voxel grid, including 3D doorknobs and transparent window panes.</p>
+            <pre>
+// Sample: 3D Door Model Definition
+private static BlockModel CreateDoorModel(bool open)
+{
+    var elements = new List&lt;BlockModelElement&gt;();
+
+    // Main Door Slab (16x32x2)
+    elements.Add(new BlockModelElement {
+        From = new Vector3(0, 0, 0),
+        To = open ? new Vector3(2, 32, 16) : new Vector3(16, 32, 2)
+    });
+
+    // 3D Doorknob
+    elements.Add(new BlockModelElement {
+        From = open ? new Vector3(2, 12, 12) : new Vector3(12, 12, 2),
+        To = open ? new Vector3(4, 14, 14) : new Vector3(14, 14, 4)
+    });
+
+    return new BlockModel(elements, display, new Vector2(48f, 32f));
+}
+            </pre>
+        </section>
+
+        <section id="multiplayer">
+            <h2>🔗 Connectivity</h2>
+            <p>Powered by <strong>Epic Online Services</strong>, Redactedcraft supports seamless P2P multiplayer without the need for port forwarding. Share a join code and jump into the world with your friends instantly.</p>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Redactedcraft Development Team</p>
+        <p>
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="terms.html">Terms of Service</a> | 
+            <a href="https://github.com/Redacted480/RedactedcraftCsharp">Source Code</a>
+        </p>
+    </footer>
+
 </body>
 </html>
