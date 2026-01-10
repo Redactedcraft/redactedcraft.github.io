@@ -331,12 +331,13 @@
             <!-- GAME UPDATES -->
             <div id="log-game" class="sub-content active">
                 <div class="log-entry">
+                    <img src="assets/img/door.png" class="log-image" style="object-fit: contain; background: #333; height: 200px; padding: 20px;">
                     <div class="log-header">
-                        <h3>📐 Model: Door Sync & File Cleanup</h3>
+                        <h3>📐 Model: Door Synchronization & Physical Reversion</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
-                        <p>Synchronized the in-game door model with the latest <code>door.json</code> specifications. This update refines the geometry to a 30-unit height and applies exact pixel-perfect UV mapping for consistent texture alignment across all faces. We also performed a repository cleanup, moving development reference files to a protected local archive.</p>
+                        <p>Refined the door implementation to provide the best of both worlds: The physical door placed in the environment has been reverted to a 2-block high voxel-aligned slab for gameplay consistency. Meanwhile, the hand and inventory models have been fully synchronized with <code>door.json</code>, featuring the 3D protruding knob and custom UV mapping.</p>
                     </div>
                 </div>
 
