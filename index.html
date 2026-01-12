@@ -282,7 +282,7 @@
     <nav class="tabs-nav">
         <button class="tab-link active" onclick="openTab(event, 'home')">HOME</button>
         <button class="tab-link" onclick="openTab(event, 'assets')">TEXTURES</button>
-        
+        <button class="tab-link" onclick="openTab(event, 'lore')">LORE</button>
         <button class="tab-link" onclick="openTab(event, 'coding')">DEV LOG</button>
         <button class="tab-link" onclick="openTab(event, 'about')">ABOUT ME</button>
     </nav>
@@ -325,6 +325,12 @@
         
                 <div class="model-controls" id="model-buttons"></div>
             </div>
+        </div>
+
+        <!-- LORE TAB -->
+        <div id="lore" class="tab-content">
+            <h2>World Lore</h2>
+            <p>The history of Redactedcraft is still being written. Check back later for updates on the world's origins...</p>
         </div>
 
         <!-- DEV LOG TAB -->
@@ -413,6 +419,16 @@
 
             <!-- WEBSITE UPDATES -->
             <div id="log-website" class="sub-content">
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>📜 New Section: Lore Tab</h3>
+                        <span class="log-date">JAN 11, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Added a dedicated <strong>Lore</strong> tab to the site navigation. This section is currently a placeholder but lays the groundwork for documenting the official history and world-building of Redactedcraft in future updates.</p>
+                    </div>
+                </div>
+
                 <div class="log-entry">
                     <div class="log-header">
                         <h3>🖼️ Texture Viewer & UX Overhaul</h3>
