@@ -9,33 +9,73 @@
   <body>
     <a-scene>
       <a-entity environment="preset: pixel; seed: 42; dressingAmount: 50; grid: dots; groundColor: #222; skyColor: #111; horizonColor: #333;"></a-entity>
-      <a-assets><img id="logo" src="../assets/img/logo.png"></a-assets>
+      <a-assets>
+        <img id="logo" src="../assets/img/logo.png">
+        <img id="grass" src="../assets/img/grass.png">
+        <img id="dirt" src="../assets/img/dirt.png">
+        <img id="stone" src="../assets/img/stone.png">
+      </a-assets>
+
       <a-entity id="rig" position="0 0 4">
-        <a-camera look-controls wasd-controls><a-cursor color="#4e9a06" fuse="false"></a-cursor></a-camera>
+        <a-camera look-controls wasd-controls>
+          <a-cursor color="#4e9a06" fuse="false" raycaster="objects: .clickable"></a-cursor>
+        </a-camera>
         <a-entity oculus-touch-controls="hand: left"></a-entity>
-        <a-entity oculus-touch-controls="hand: right"></a-entity>
+        <a-entity oculus-touch-controls="hand: right" raycaster="objects: .clickable; far: 10; showLine: true;"></a-entity>
       </a-entity>
-      <a-image src="#logo" position="0 2.5 -2" width="2" height="0.5" transparent="true"></a-image>
-      <a-entity position="0 1.5 -2">
-        <a-plane color="#2d2d2d" width="3" height="2" position="0 0 -0.05"></a-plane>
-        <a-text value="REDACTEDCRAFT VR PORTAL" align="center" position="0 0.7 0" color="#e9b96e" width="4"></a-text>
-        <a-entity class="clickable" position="-0.8 -0.2 0" geometry="primitive: plane; width: 0.7; height: 0.4" material="color: #4e9a06" onclick="window.location.href='../'">
-          <a-text value="HOME" align="center" position="0 0 0.01" color="#fff" width="2"></a-text>
+
+      <!-- Voxel Room Elements -->
+      <a-box src="#grass" position="-2 0.5 -3" rotation="0 45 0"></a-box>
+      <a-box src="#dirt" position="-2 0.5 -2" rotation="0 45 0"></a-box>
+      <a-box src="#stone" position="2 0.5 -3" rotation="0 -45 0"></a-box>
+      <a-box src="#stone" position="2 1.5 -3" rotation="0 -45 0"></a-box>
+      
+      <a-image src="#logo" position="0 3 -2.5" width="2" height="0.5" transparent="true"></a-image>
+
+      <!-- Kiosk UI -->
+      <a-entity position="0 1.5 -2.5">
+        <a-plane color="#2d2d2d" width="3.5" height="2.2" position="0 0 -0.05"></a-plane>
+        <a-text value="REDACTEDCRAFT VR PORTAL" align="center" position="0 0.8 0" color="#e9b96e" width="4" font="monoid"></a-text>
+        
+        <!-- Instructions -->
+        <a-text value="Click a panel to open the site.\nUse the browser back button to return." 
+                align="center" position="0 0.4 0" color="#ccc" width="2.5"></a-text>
+
+        <!-- Buttons -->
+        <a-entity class="clickable" position="-1 -0.3 0" 
+                  geometry="primitive: plane; width: 0.8; height: 0.5" 
+                  material="color: #4e9a06" 
+                  onclick="window.location.href='../'">
+          <a-text value="HOME" align="center" position="0 0 0.01" color="#fff" width="2.5"></a-text>
         </a-entity>
-        <a-entity class="clickable" position="0 -0.2 0" geometry="primitive: plane; width: 0.7; height: 0.4" material="color: #4e9a06" onclick="window.location.href='../#coding'">
-          <a-text value="DEVLOG" align="center" position="0 0 0.01" color="#fff" width="2"></a-text>
+
+        <a-entity class="clickable" position="0 -0.3 0" 
+                  geometry="primitive: plane; width: 0.8; height: 0.5" 
+                  material="color: #4e9a06" 
+                  onclick="window.location.href='../#coding'">
+          <a-text value="DEVLOG" align="center" position="0 0 0.01" color="#fff" width="2.5"></a-text>
         </a-entity>
-        <a-entity class="clickable" position="0.8 -0.2 0" geometry="primitive: plane; width: 0.7; height: 0.4" material="color: #4e9a06" onclick="window.location.href='../#assets'">
-          <a-text value="BLOCKS" align="center" position="0 0 0.01" color="#fff" width="2"></a-text>
+
+        <a-entity class="clickable" position="1 -0.3 0" 
+                  geometry="primitive: plane; width: 0.8; height: 0.5" 
+                  material="color: #4e9a06" 
+                  onclick="window.location.href='../#assets'">
+          <a-text value="TEXTURES" align="center" position="0 0 0.01" color="#fff" width="2.5"></a-text>
         </a-entity>
       </a-entity>
-      <a-box position="-2 0.5 -3" color="#4e9a06" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-box>
-      <a-box position="2 0.5 -3" color="#e9b96e" animation="property: rotation; to: 0 -360 0; loop: true; dur: 8000"></a-box>
+
+      <!-- Ambient Cubes -->
+      <a-box position="-4 0.5 0" color="#4e9a06" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"></a-box>
+      <a-box position="4 0.5 0" color="#e9b96e" animation="property: rotation; to: 0 -360 0; loop: true; dur: 8000"></a-box>
     </a-scene>
     <script>
       document.querySelectorAll('.clickable').forEach(el => {
         el.addEventListener('mouseenter', () => el.setAttribute('material', 'color', '#3a7304'));
         el.addEventListener('mouseleave', () => el.setAttribute('material', 'color', '#4e9a06'));
+        el.addEventListener('click', () => {
+          const url = el.getAttribute('onclick').match(/'([^']+)'/)[1];
+          window.location.href = url;
+        });
       });
     </script>
   </body>

@@ -1033,7 +1033,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
         populateGalleries();
         // WebXR / Quest Detection
         async function checkVR() {
-            const isQuest = /OculusBrowser|Quest/i.test(navigator.userAgent);
+            const isQuest = /OculusBrowser|Quest/i.test(navigator.userAgent) || window.location.search.includes('debugvr=1');
             const vrSupported = navigator.xr && await navigator.xr.isSessionSupported('immersive-vr');
             if (isQuest && vrSupported) {
                 document.getElementById('vrIcon').style.display = 'block';
