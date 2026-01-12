@@ -350,9 +350,31 @@
         footer { text-align: center; padding: 40px; background: #111; font-size: 0.9rem; color: #666; margin-top: 50px; }
         footer a { color: var(--primary); text-decoration: none; margin: 0 10px; }
         .btn { display: inline-block; background-color: var(--primary); color: white; padding: 12px 24px; text-decoration: none; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; border: 4px solid var(--primary-dark); box-shadow: 4px 4px 0px #000; }
+        #vrIcon {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: #4e9a06;
+            color: white;
+            border: 4px solid white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(78, 154, 6, 0.5);
+            transition: transform 0.2s;
+        }
+        #vrIcon:hover { transform: scale(1.1); }
+        #vrIcon i { font-size: 24px; }
+
     </style>
 </head>
 <body>
+    <button id="vrIcon" onclick="window.location.href='./vr/'" title="Enter VR (Quest Only)">
+        <i class="fas fa-vr-cardboard"></i>
+    </button>
+
 
     <header>
         <img src="assets/img/logo.png" alt="Redactedcraft Logo" class="logo">
@@ -603,6 +625,17 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
             <!-- WEBSITE UPDATES -->
             <div id="log-website" class="sub-content">
+
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🥽 New Feature: WebXR VR Portal</h3>
+                        <span class="log-date">JAN 12, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Meta Quest users rejoice! We've launched an experimental <strong>WebXR VR Portal</strong>. If you are browsing on a Quest 2 or 3, look for the VR icon in the bottom corner to enter an immersive voxel room.</p>
+                        <p>The VR room features a central kiosk where you can jump directly back to specific site sections while remaining in your headset.</p>
+                    </div>
+                </div>
 
                 <div class="log-entry">
                     <div class="log-header">
@@ -998,6 +1031,31 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
         }
 
         populateGalleries();
+        // WebXR / Quest Detection
+        async function checkVR() {
+            const isQuest = /OculusBrowser|Quest/i.test(navigator.userAgent);
+            const vrSupported = navigator.xr && await navigator.xr.isSessionSupported('immersive-vr');
+            if (isQuest && vrSupported) {
+                document.getElementById('vrIcon').style.display = 'block';
+            }
+        }
+        checkVR();
+
+        // Sync Tabs with URL Hash
+        function syncTab() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.getElementById(hash)) {
+                const btn = Array.from(document.querySelectorAll('.tab-link')).find(l => 
+                    l.textContent.toLowerCase().includes(hash.toLowerCase()) || 
+                    (hash === 'coding' && l.textContent.includes('DEV LOG')) ||
+                    (hash === 'assets' && l.textContent.includes('TEXTURES'))
+                );
+                if (btn) btn.click();
+            }
+        }
+        window.addEventListener('hashchange', syncTab);
+        syncTab();
+
     </script>
 
 </body>
