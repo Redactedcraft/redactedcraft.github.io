@@ -266,6 +266,57 @@
         .social-btn.twitch:hover { background: #9146FF; }
         .social-btn.instagram:hover { background: #E1306C; }
 
+        /* New Feature Grid Styles */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: var(--panel-bg);
+            border: 4px solid #444;
+            padding: 20px;
+            box-shadow: 6px 6px 0px #000;
+            transition: transform 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #111;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            color: #ccc;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .code-keyword { color: #d7ba7d; }
+        .code-type { color: #4ec9b0; }
+        .code-string { color: #ce9178; }
+        .code-comment { color: #6a9955; }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 4px solid #333;
+            padding-bottom: 40px;
+        }
+
         pre { background: #000; padding: 20px; border-radius: 5px; overflow-x: auto; border-left: 5px solid var(--primary); font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; }
         footer { text-align: center; padding: 40px; background: #111; font-size: 0.9rem; color: #666; margin-top: 50px; }
         footer a { color: var(--primary); text-decoration: none; margin: 0 10px; }
@@ -291,13 +342,91 @@
         
         <!-- HOME TAB -->
         <div id="home" class="tab-content active">
-            <h2>The Art of the Pixel</h2>
-            <p>Redactedcraft is an experimental voxel project focused on performance and aesthetic clarity. Every asset is hand-crafted to fit a specific visual language.</p>
-            <div style="text-align: center; margin: 40px 0;">
-                <img src="assets/img/hero_bg.png" style="width: 100%; border: 8px solid var(--panel-bg); image-rendering: pixelated; box-shadow: 10px 10px 0px #000;">
+            
+            <div class="hero-section">
+                <h2>The Art of the Pixel</h2>
+                <p style="max-width: 700px; margin: 0 auto 30px auto;">
+                    Redactedcraft is an experimental voxel project focused on performance and aesthetic clarity. 
+                    Built from scratch in C# using MonoGame, it pushes the boundaries of what a solo dev engine can do.
+                </p>
+                <a href="https://github.com/Redactedcraft/Redactedcraft/releases/latest" class="btn">
+                    <i class="fas fa-download"></i> DOWNLOAD GAME (LATEST)
+                </a>
+                <div style="margin-top: 15px;">
+                    <a href="https://github.com/Redactedcraft/Redactedcraft/releases/latest/download/RedactedCraft.exe" style="color: var(--primary); text-decoration: none; font-family: 'Press Start 2P'; font-size: 0.5rem; border-bottom: 2px solid var(--primary); padding-bottom: 2px;">
+                        DIRECT .EXE DOWNLOAD
+                    </a>
+                </div>
+                <br>
+                <small style="color: #666;">Available for Windows x64</small>
             </div>
-            <div style="text-align: center;">
-                <a href="https://github.com/Redactedcraft/Assets/releases" class="btn">DOWNLOAD LATEST ASSETS (V4)</a>
+
+            <h3 class="category-title">Engine Architecture</h3>
+            
+            <div class="feature-grid">
+                
+                <!-- Card 1: Terrain -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-mountain"></i></div>
+                    <h3>Infinite Terrain</h3>
+                    <p>Procedural generation using multi-layered Simplex noise for realistic biomes and elevations.</p>
+                    <div class="code-block">
+<span class="code-keyword">var</span> noise = <span class="code-keyword">new</span> <span class="code-type">FastNoise</span>();
+<span class="code-keyword">float</span> height = noise.GetPerlin(x, z);
+<span class="code-comment">// Map noise to voxel types</span>
+<span class="code-keyword">if</span> (height > 0.6f) <span class="code-keyword">return</span> <span class="code-type">Block</span>.Stone;
+<span class="code-keyword">return</span> <span class="code-type">Block</span>.Grass;</div>
+                </div>
+
+                <!-- Card 2: Meshing -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cubes"></i></div>
+                    <h3>Greedy Meshing</h3>
+                    <p>Optimized rendering that merges adjacent faces into single quads to reduce GPU draw calls.</p>
+                    <div class="code-block">
+<span class="code-comment">// Combine adjacent faces</span>
+<span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = 0; i < width; i++) {
+  <span class="code-keyword">if</span> (mask[i] != <span class="code-keyword">null</span>) {
+     width++; <span class="code-comment">// Extend quad</span>
+  }
+}
+<span class="code-type">Mesh</span>.AddQuad(start, width, height);</div>
+                </div>
+
+                <!-- Card 3: Networking -->
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
+                    <h3>EOS Multiplayer</h3>
+                    <p>Built on Epic Online Services for robust P2P networking and seamless lobby management.</p>
+                    <div class="code-block">
+<span class="code-keyword">var</span> options = <span class="code-keyword">new</span> <span class="code-type">JoinSessionOptions</span> {
+  SessionHandle = searchResult
+};
+_eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) => {
+  <span class="code-type">Logger</span>.Log(<span class="code-string">"Joined Game!"</span>);
+});</div>
+                </div>
+
+            </div>
+
+            <h3 class="category-title">Hosting & Infrastructure</h3>
+            <div class="feature-card" style="margin-top: 20px; border-left: 10px solid #2ea44f;">
+                <div class="feature-icon" style="color: #2ea44f;"><i class="fab fa-github"></i></div>
+                <h3>Powered by GitHub Pages</h3>
+                <p>
+                    Redactedcraft is proudly hosted on **GitHub Pages**. We chose this infrastructure for three simple reasons:
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 20px 0;">
+                    <li><i class="fas fa-check" style="color: var(--primary);"></i> <strong>Integrated:</strong> Direct synchronization with our source code for instant updates.</li>
+                    <li><i class="fas fa-check" style="color: var(--primary);"></i> <strong>Performance:</strong> High-speed CDN delivery ensured by GitHub's global network.</li>
+                    <li><i class="fas fa-check" style="color: var(--primary);"></i> <strong>Sustainable:</strong> It is **100% Free**, allowing us to keep the project open and accessible without server overhead.</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="https://github.com/Redactedcraft/Assets/releases" class="btn" style="background: #333; border-color: #666;">
+                    <i class="fas fa-box-open"></i> BROWSE ASSET PACKS
+                </a>
             </div>
         </div>
 
@@ -419,6 +548,16 @@
 
             <!-- WEBSITE UPDATES -->
             <div id="log-website" class="sub-content">
+                <div class="log-entry">
+                    <div class="log-header">
+                        <h3>🏠 Home Page Redesign & Technical Showcase</h3>
+                        <span class="log-date">JAN 11, 2026</span>
+                    </div>
+                    <div class="log-body">
+                        <p>Overhauled the landing page with a professional <strong>Technical Showcase</strong>. Users can now explore the engine's core architecture through interactive feature cards and live C# code snippets. Additionally, we added an <strong>Infrastructure</strong> section explaining our commitment to open and free hosting via GitHub Pages.</p>
+                    </div>
+                </div>
+
                 <div class="log-entry">
                     <div class="log-header">
                         <h3>📜 New Section: Lore Tab</h3>
