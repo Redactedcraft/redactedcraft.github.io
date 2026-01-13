@@ -18,10 +18,10 @@
 - Not applicable (static site).
 
 ## What was pushed
-- Pending commit/push.
+- Branch update/blocks-and-assets-v1_4 pushed to origin (commit 378df66).
 
 ## Next steps
-- Commit and push website updates on update/blocks-and-assets-v1_4.
+- Create releases for game and assets, then update checkpoints and master checkpoint.
 
 ## SWE-1.5 CONTINUATION PROMPT
-If taking over, commit/push website changes, then proceed to releases for game and assets.
+If taking over, proceed to releases for game and assets, then update checkpoints and master checkpoint.
