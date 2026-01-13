@@ -6,7 +6,16 @@
     <title>Redactedcraft | Official Site</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+        function openFaction(evt, factionId) {
+            const container = evt.currentTarget.parentElement.parentElement;
+            container.querySelectorAll(".faction-content").forEach(c => c.classList.remove("active"));
+            container.querySelectorAll(".faction-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById(factionId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+    </script>
     <style>
         :root {
             --primary: #4e9a06;
@@ -383,6 +392,51 @@
             margin-right: auto;
         }
 
+    
+        /* Faction Tabs */
+        .faction-tabs {
+            margin: 40px 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .faction-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .faction-btn {
+            background: #222;
+            border: 2px solid #444;
+            color: #888;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .faction-btn:hover { color: var(--text-light); border-color: var(--primary); }
+        .faction-btn.active {
+            background: var(--primary-dark);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 4px 4px 0px #000;
+        }
+        .faction-content {
+            display: none;
+            padding: 30px;
+            background: rgba(0,0,0,0.2);
+            border: 2px solid #444;
+            animation: fadeIn 0.3s;
+            width: 100%;
+            max-width: 800px;
+        }
+        .faction-content.active { display: block; }
+        .faction-content h3 { margin-top: 0 !important; font-size: 1.2rem; }
+
     </style>
 </head>
 <body>
@@ -462,7 +516,7 @@
                 <!-- Card 3: Networking -->
                 <div class="feature-card">
                     <div class="feature-icon"><i class="fas fa-network-wired"></i></div>
-                    <h3>ðŸª EOS Multiplayer</h3>
+                    <h3>🪐 EOS Multiplayer</h3>
                     <p>Built on Epic Online Services for robust P2P networking and seamless lobby management.</p>
                     <div class="code-block">
 <span class="code-keyword">var</span> options = <span class="code-keyword">new</span> <span class="code-type">JoinSessionOptions</span> {
@@ -536,19 +590,19 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 <h3>The Rule of Three: Frame / Conduit / Limiter</h3>
 <p>Every working system in RedactedCraft reality has three parts:</p>
 <ul>
-<li><strong>Frame</strong> â€” <em>Where the rule applies.</em> A boundary that defines scope: â€œHere, and not there.â€</li>
-<li><strong>Conduit</strong> â€” <em>How the rule moves.</em> A path for flow: heat, signal, transit, resonance.</li>
-<li><strong>Limiter</strong> â€” <em>Where the rule stops.</em> A termination: brake, seal, cap, or refusal.</li>
+<li><strong>Frame</strong> — <em>Where the rule applies.</em> A boundary that defines scope: â€œHere, and not there.â€</li>
+<li><strong>Conduit</strong> — <em>How the rule moves.</em> A path for flow: heat, signal, transit, resonance.</li>
+<li><strong>Limiter</strong> — <em>Where the rule stops.</em> A termination: brake, seal, cap, or refusal.</li>
 </ul>
 <p><strong>Continuist claim:</strong> You can build almost anything if you obey the Rule of Three.</p>
-<p><strong>Observed consequence:</strong> If you skip the limiter, the system can still runâ€”but the â€œdebtâ€ is collected later.</p>
+<p><strong>Observed consequence:</strong> If you skip the limiter, the system can still run—but the â€œdebtâ€ is collected later.</p>
 <p>---</p>
 <h3 class="category-title" id="the-veil-and-the-echo">The Veil and the Echo</h3>
 <h3>The Veil</h3>
 <p>The Veil is the separation between places, states, and routes. Gates and transit systems stretch it.</p>
 <h3>The Echo</h3>
 <p>The Echo is not a demon or a god; it is a phenomenon: <strong>pressure that seeks completion</strong>.</p>
-<p>When a system is incompleteâ€”especially when its limiter is missingâ€”the Echo supplies a counterfeit completion so the system can run.</p>
+<p>When a system is incomplete—especially when its limiter is missing—the Echo supplies a counterfeit completion so the system can run.</p>
 <p>That counterfeit always has a cost:</p>
 <ul>
 <li>attention (systems become â€œnoticedâ€)</li>
@@ -563,70 +617,91 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 <p>At the bottom of the world (y==0), the rules stop negotiating.</p>
 <ul>
 <li><strong>Gameplay:</strong> Nullblock is always at `y == 0`. It is <strong>unbreakable in Survival</strong>.</li>
-<li><strong>Lore:</strong> Reaching Nullrock is not reaching bedrockâ€”it's reaching an argument you cannot win.</li>
+<li><strong>Lore:</strong> Reaching Nullrock is not reaching bedrock—it's reaching an argument you cannot win.</li>
 </ul>
 <p><strong>Continuist line:</strong> <em>â€œWhen you reach Nullrock, you are not at bedrock. You are at refusal.â€</em></p>
 <p>---</p>
 <h3 class="category-title" id="main-factions">Main Factions</h3>
-<h3>Continuists â€” â€œThe Correct Shape of Thingsâ€</h3>
-<ul>
-<li><strong>Belief:</strong> Reality is buildable if you obey structure.</li>
-<li><strong>Practice:</strong> Survey, regulation, reproducible craft, documentation, stable stations.</li>
-<li><strong>How right they are:</strong> <strong>Most correct</strong> relative to the worldâ€™s underlying rules.</li>
-<li><strong>Failure mode:</strong> Arrogance; treating people like components.</li>
-</ul>
-<h3>Veilkeepers â€” â€œSafety Through Sealingâ€</h3>
-<ul>
-<li><strong>Belief:</strong> Most doors should remain closed.</li>
-<li><strong>Practice:</strong> Seals, containment, forbiddance, procedure, classification.</li>
-<li><strong>How right they are:</strong> Very right about risk; can become overly restrictive.</li>
-<li><strong>Failure mode:</strong> Stagnation; preventing progress along with disasters.</li>
-</ul>
-<h3>Hearthward Covenant â€” â€œSurvival Before Theoryâ€</h3>
-<ul>
-<li><strong>Belief:</strong> The world is dangerous; safety is communal discipline.</li>
-<li><strong>Practice:</strong> No gates inside town; salt before sip; listen before digging.</li>
-<li><strong>How right they are:</strong> Practically right; keeps people alive.</li>
-<li><strong>Failure mode:</strong> Distrust of necessary advancement.</li>
-</ul>
-<h3>Ascendants â€” â€œPower Proves Truthâ€</h3>
-<ul>
-<li><strong>Belief:</strong> Limits are lies; pain is payment.</li>
-<li><strong>Practice:</strong> Force systems to work; widen paths; sacrifice the body.</li>
-<li><strong>How right they are:</strong> Wrong long-term; results now, catastrophe later.</li>
-<li><strong>Failure mode:</strong> Confusing â€œworks nowâ€ with â€œworks safely.â€</li>
-</ul>
-<h3>Echo Faith â€” â€œMeaning in the Pressureâ€</h3>
-<ul>
-<li><strong>Belief:</strong> The Echo speaks; patterns are messages.</li>
-<li><strong>Practice:</strong> Shrines, repetition, offerings, interpretation.</li>
-<li><strong>How right they are:</strong> Occasionally predictive; unreliable.</li>
-<li><strong>Failure mode:</strong> Romanticizing the phenomenon that feeds on mistakes.</li>
-</ul>
+
+<div class="faction-tabs">
+    <div class="faction-nav">
+        <button class="faction-btn active" onclick="openFaction(event, 'continuists')">CONTINUISTS</button>
+        <button class="faction-btn" onclick="openFaction(event, 'veilkeepers')">VEILKEEPERS</button>
+        <button class="faction-btn" onclick="openFaction(event, 'hearthward')">HEARTHWARD</button>
+        <button class="faction-btn" onclick="openFaction(event, 'ascendants')">ASCENDANTS</button>
+        <button class="faction-btn" onclick="openFaction(event, 'echo-faith')">ECHO FAITH</button>
+    </div>
+    <div id="continuists" class="faction-content active">
+        <h3>Continuists - "The Correct Shape of Things"</h3>
+        <ul>
+            <li><strong>Belief:</strong> Reality is buildable if you obey structure.</li>
+            <li><strong>Practice:</strong> Survey, regulation, reproducible craft, documentation, stable stations.</li>
+            <li><strong>How right they are:</strong> <strong>Most correct</strong> relative to the world's underlying rules.</li>
+            <li><strong>Failure mode:</strong> Arrogance; treating people like components.</li>
+        </ul>
+    </div>
+    <div id="veilkeepers" class="faction-content">
+        <h3>Veilkeepers - "Safety Through Sealing"</h3>
+        <ul>
+            <li><strong>Belief:</strong> Most doors should remain closed.</li>
+            <li><strong>Practice:</strong> Seals, containment, forbiddance, procedure, classification.</li>
+            <li><strong>How right they are:</strong> Very right about risk; can become overly restrictive.</li>
+            <li><strong>Failure mode:</strong> Stagnation; preventing progress along with disasters.</li>
+        </ul>
+    </div>
+    <div id="hearthward" class="faction-content">
+        <h3>Hearthward - "Survival Before Theory"</h3>
+        <ul>
+            <li><strong>Belief:</strong> The world is dangerous; safety is communal discipline.</li>
+            <li><strong>Practice:</strong> No gates inside town; salt before sip; listen before digging.</li>
+            <li><strong>How right they are:</strong> Practically right; keeps people alive.</li>
+            <li><strong>Failure mode:</strong> Distrust of necessary advancement.</li>
+        </ul>
+    </div>
+    <div id="ascendants" class="faction-content">
+        <h3>Ascendants - "Power Proves Truth"</h3>
+        <ul>
+            <li><strong>Belief:</strong> Limits are lies; pain is payment.</li>
+            <li><strong>Practice:</strong> Force systems to work; widen paths; sacrifice the body.</li>
+            <li><strong>How right they are:</strong> Wrong long-term; results now, catastrophe later.</li>
+            <li><strong>Failure mode:</strong> Confusing "works now" with "works safely."</li>
+        </ul>
+    </div>
+    <div id="echo-faith" class="faction-content">
+        <h3>Echo Faith - "Meaning in the Pressure"</h3>
+        <ul>
+            <li><strong>Belief:</strong> The Echo speaks; patterns are messages.</li>
+            <li><strong>Practice:</strong> Shrines, repetition, offerings, interpretation.</li>
+            <li><strong>How right:</strong> Occasionally predictive; unreliable.</li>
+            <li><strong>Failure mode:</strong> Romanticizing the phenomenon that feeds on mistakes.</li>
+        </ul>
+    </div>
+</div>
+
 <p>---</p>
 <h3 class="category-title" id="death-and-pattern-residue-continuist-classification">Death and Pattern Residue (Continuist Classification)</h3>
 <p>A person is a <strong>pattern</strong> as well as a body. When the body ends, the pattern may not dissipate cleanly.</p>
-<h3>Class I â€” Quiet Termination</h3>
+<h3>Class I — Quiet Termination</h3>
 <p>Starvation, ordinary injury, death far from thin places.</p>
 <ul>
 <li><strong>Result:</strong> Pattern dissipates cleanly; little residue.</li>
 </ul>
-<h3>Class II â€” Violent Termination</h3>
+<h3>Class II — Violent Termination</h3>
 <p>Falls, drowning, burning, crushing.</p>
 <ul>
 <li><strong>Result:</strong> Sharp residue; the place â€œremembersâ€ for a time.</li>
 </ul>
-<h3>Class III â€” Echo-Fed Termination</h3>
+<h3>Class III — Echo-Fed Termination</h3>
 <p>Death while corrupted, during unstable craft, near shrines or repeating failure loops.</p>
 <ul>
 <li><strong>Result:</strong> Pattern sticks; Echo attention increases; events can repeat as phenomena.</li>
 </ul>
-<h3>Class IV â€” Transit Termination</h3>
+<h3>Class IV — Transit Termination</h3>
 <p>Death during gate travel or routing systems.</p>
 <ul>
-<li><strong>Result:</strong> Misfiled patternâ€”split, echoed, routed wrong. Veilkeepers fear this most.</li>
+<li><strong>Result:</strong> Misfiled pattern—split, echoed, routed wrong. Veilkeepers fear this most.</li>
 </ul>
-<h3>Class V â€” Nullrock-Adjacent Termination</h3>
+<h3>Class V — Nullrock-Adjacent Termination</h3>
 <p>Death near the bottom law.</p>
 <ul>
 <li><strong>Result:</strong> Forced closure; residue collapses rapidly.</li>
@@ -653,12 +728,12 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 <p>---</p>
 <h3 class="category-title" id="the-mine-networks-abandoned-mines">The Mine Networks (Abandoned Mines)</h3>
 <p>Mines were extraction systems built by people who thought they could outwork reality.</p>
-<h3>Timber Mines (Shallowâ€“Mid)</h3>
+<h3>Timber Mines (Shallow–Mid)</h3>
 <p>Fast, practical, recent. Wooden supports, simple corridors.</p>
 <ul>
 <li>Abandoned because: resources ran out; collapses increased; â€œquietâ€ became rare.</li>
 </ul>
-<h3>Stoneâ€‘Braced Mines (Midâ€“Deep)</h3>
+<h3>Stoneâ€‘Braced Mines (Mid–Deep)</h3>
 <p>Engineered shafts and rooms. Continuist survey markers common.</p>
 <ul>
 <li>Abandoned because: deeper pressure demanded perfect limiters; perfect limiters were scarce.</li>
@@ -739,9 +814,9 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                     <div class="log-body">
                         <p>A massive update to our world documentation! The lore page has been fully populated with the <strong>Continuist Papers</strong>.</p>
                         <ul>
-                            <li><strong>Rule of Three:</strong> Frame / Conduit / Limiter</li><li><strong>Nullrock:</strong> the worldâ€™s perfect limiter at the bottom (refusal made physical)</li><li><strong>The Echo:</strong> pressure that completes incomplete systemsâ€”always with a cost</li><li><strong>Deep Strata:</strong> deeper places amplify repetition and residue</li><li><strong>Abandoned Mines:</strong> timber (shallow), stoneâ€‘braced (mid/deep), echoâ€‘collapsed (deep)</li>
+                            <li><strong>Rule of Three:</strong> Frame / Conduit / Limiter</li><li><strong>Nullrock:</strong> the worldâ€™s perfect limiter at the bottom (refusal made physical)</li><li><strong>The Echo:</strong> pressure that completes incomplete systems—always with a cost</li><li><strong>Deep Strata:</strong> deeper places amplify repetition and residue</li><li><strong>Abandoned Mines:</strong> timber (shallow), stoneâ€‘braced (mid/deep), echoâ€‘collapsed (deep)</li>
                         </ul>
-                        <p>Dive deep into the history of the Ancient Architects on the <a href="#lore" onclick="openTab(event, 'lore')" style="color: var(--primary);">Lore Page</a>. ðŸ“–</p>
+                        <p>Dive deep into the history of the Ancient Architects on the <a href="#lore" onclick="openTab(event, 'lore')" style="color: var(--primary);">Lore Page</a>. 📖</p>
                     </div>
                 </div>
                 
@@ -750,19 +825,19 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ› ï¸ THE ARTIFICER UPDATE (v6.0.0)</h3>
+                        <h3>🛠️ THE ARTIFICER UPDATE (v6.0.0)</h3>
                         <span class="log-date">JAN 13, 2026</span>
                     </div>
                     <div class="log-body">
-                        <p>The <strong>Artificer Update</strong> is here! This major release (v6.0.0) consolidates all assets and features into a unified, high-performance voxel experience. ðŸš€</p>
+                        <p>The <strong>Artificer Update</strong> is here! This major release (v6.0.0) consolidates all assets and features into a unified, high-performance voxel experience. 🚀</p>
                         <ul>
-                            <li><strong>ðŸª¨ Nullblock:</strong> The world's final layer is now canonically Nullblock, unbreakable and enforced at Y=0.</li>
+                            <li><strong>🪐¨ Nullblock:</strong> The world's final layer is now canonically Nullblock, unbreakable and enforced at Y=0.</li>
                             <li><strong>📚 Full Lore Integration:</strong> Discover the secrets of the Ancient Architects with the new inscription and tablet fragment systems.</li>
-                            <li><strong>âš’ï¸ Artificer's Workbench:</strong> A new dedicated station for advanced gatecraft and rule-driven creation.</li>
-                            <li><strong>ðŸ§± New Blocks & Textures:</strong> High-fidelity textures for Runestone, Veinstone, Veilglass, and Resonance Cores.</li>
-                            <li><strong>ðŸ”„ Engine Synchronization:</strong> Major version alignment across game and assets for seamless updates.</li>
+                            <li><strong>⚒️ Artificer's Workbench:</strong> A new dedicated station for advanced gatecraft and rule-driven creation.</li>
+                            <li><strong>🧱 New Blocks & Textures:</strong> High-fidelity textures for Runestone, Veinstone, Veilglass, and Resonance Cores.</li>
+                            <li><strong>🔄 Engine Synchronization:</strong> Major version alignment across game and assets for seamless updates.</li>
                         </ul>
-                        <p>Check out the latest files on the <a href="https://github.com/Redactedcraft/Redactedcraft" style="color: var(--primary);">GitHub Repository</a>. âœ¨</p>
+                        <p>Check out the latest files on the <a href="https://github.com/Redactedcraft/Redactedcraft" style="color: var(--primary);">GitHub Repository</a>. ✨</p>
                     </div>
                 </div>
                 <div class="log-entry">
@@ -782,7 +857,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                 </div>
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>âš¡ RedactedCraft v0.1.2 â€” EOS Recovery Patch</h3>
+                        <h3>⚡ RedactedCraft v0.1.2 — EOS Recovery Patch</h3>
                         <span class="log-date">JAN 12, 2026</span>
                     </div>
                     <div class="log-body">
@@ -796,7 +871,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                 </div>
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ”§ Engine: Infrastructure & SDK Cleanup</h3>
+                        <h3>🔧 Engine: Infrastructure & SDK Cleanup</h3>
                         <span class="log-date">JAN 12, 2026</span>
                     </div>
                     <div class="log-body">
@@ -810,7 +885,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                 </div>
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ› ï¸ Developer Update: Unified Build Pipeline</h3>
+                        <h3>🛠️ Developer Update: Unified Build Pipeline</h3>
                         <span class="log-date">JAN 11, 2026</span>
                     </div>
                     <div class="log-body">
@@ -820,7 +895,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ§¹ Launcher: Distribution & Asset Skip Logic</h3>
+                        <h3>🧹 Launcher: Distribution & Asset Skip Logic</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
@@ -835,7 +910,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                 <div class="log-entry">
                     <img src="assets/img/Screenshots_bg.png" class="log-image">
                     <div class="log-header">
-                        <h3>ðŸ–¼ï¸ World: Environmental UI Rendering</h3>
+                        <h3>🖼️ World: Environmental UI Rendering</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
@@ -845,7 +920,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ“¡ Multiplayer: EOS Integration Phase I</h3>
+                        <h3>📡 Multiplayer: EOS Integration Phase I</h3>
                         <span class="log-date">JAN 05, 2026</span>
                     </div>
                     <div class="log-body">
@@ -855,7 +930,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ—ºï¸ World: Advanced Greedy Meshing</h3>
+                        <h3>🗺️ World: Advanced Greedy Meshing</h3>
                         <span class="log-date">DEC 20, 2025</span>
                     </div>
                     <div class="log-body">
@@ -865,7 +940,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸš€ Project Start: MonoGame Architecture</h3>
+                        <h3>🚀 Project Start: MonoGame Architecture</h3>
                         <span class="log-date">DEC 01, 2025</span>
                     </div>
                     <div class="log-body">
@@ -890,7 +965,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ“± UX: Touch-Optimized 3D Inspection</h3>
+                        <h3>📱 UX: Touch-Optimized 3D Inspection</h3>
                         <span class="log-date">JAN 12, 2026</span>
                     </div>
                     <div class="log-body">
@@ -899,7 +974,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
                 </div>
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>âš–ï¸ Legal: Privacy & Terms Implementation</h3>
+                        <h3>⚖️ Legal: Privacy & Terms Implementation</h3>
                         <span class="log-date">JAN 11, 2026</span>
                     </div>
                     <div class="log-body">
@@ -909,7 +984,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>â™»ï¸ Assets: Texture Rotation (Artificer Bench)</h3>
+                        <h3>♻️ Assets: Texture Rotation (Artificer Bench)</h3>
                         <span class="log-date">JAN 11, 2026</span>
                     </div>
                     <div class="log-body">
@@ -919,7 +994,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ–¼ï¸ Asset Browser: Massive Preview & UI Overhaul</h3>
+                        <h3>🖼️ Asset Browser: Massive Preview & UI Overhaul</h3>
                         <span class="log-date">JAN 11, 2026</span>
                     </div>
                     <div class="log-body">
@@ -929,7 +1004,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
 
                 <div class="log-entry">
                     <div class="log-header">
-                        <h3>ðŸ§¹ Repository: Migration to GitHub Organization</h3>
+                        <h3>🧹 Repository: Migration to GitHub Organization</h3>
                         <span class="log-date">JAN 10, 2026</span>
                     </div>
                     <div class="log-body">
@@ -955,7 +1030,7 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
             <p>Redactedcraft is a passion project developed entirely solo. The goal is to build a modern, high-performance foundation for voxel games that respects the retro aesthetic of the past.</p>
             
             <div class="card" style="margin-top: 30px;">
-                <h3>ðŸ”— Connect with Redacted</h3>
+                <h3>🕯️— Connect with Redacted</h3>
                 <div class="social-links">
                     <a href="https://www.youtube.com/redacted1" class="social-btn youtube" target="_blank">
                         <i class="fab fa-youtube"></i> Redacted's YouTube
@@ -1274,6 +1349,15 @@ _eos.Sessions.JoinSession(options, (<span class="code-keyword">ref</span> info) 
         }
         window.addEventListener('hashchange', syncTab);
         syncTab();
+
+    
+        function openFaction(evt, factionId) {
+            const container = evt.currentTarget.parentElement.parentElement;
+            container.querySelectorAll(".faction-content").forEach(c => c.classList.remove("active"));
+            container.querySelectorAll(".faction-btn").forEach(b => b.classList.remove("active"));
+            document.getElementById(factionId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
 
     </script>
 
