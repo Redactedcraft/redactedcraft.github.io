@@ -18,9 +18,11 @@
       });
 
       let scrollY = 0;
-      const MAX_SCROLL = 8;
+      const SCROLL_STEP = 0.5;
+      const MAX_SCROLL = 10;
+
       function applyScroll(dir) {
-        scrollY += dir * 0.5;
+        scrollY += dir * SCROLL_STEP;
         scrollY = Math.max(0, Math.min(scrollY, MAX_SCROLL));
         const scroller = document.getElementById('log-scroller');
         if (scroller) scroller.setAttribute('position', `0 ${scrollY} 0`);
@@ -70,9 +72,7 @@
         <img id="logo-img" src="../assets/img/logo.png" crossorigin="anonymous">
         <img id="hero-img" src="../assets/img/hero_bg.png" crossorigin="anonymous">
         <img id="screenshots-bg" src="../assets/img/Screenshots_bg.png" crossorigin="anonymous">
-        <!-- MSDF Fonts -->
-        <a-asset-item id="font-pressstart" src="https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/pressstart2p/PressStart2P-Regular.json"></a-asset-item>
-        <a-asset-item id="font-vt323" src="https://raw.githubusercontent.com/etiennepinchon/aframe-fonts/master/fonts/vt323/VT323-Regular.json"></a-asset-item>
+        <img id="profile-bg" src="../assets/img/Profile_bg.png" crossorigin="anonymous">
       </a-assets>
 
       <a-entity environment="preset: pixel; seed: 42; dressingAmount: 50; grid: dots; groundColor: #1a1a1a; skyColor: #111; horizonColor: #333;"></a-entity>
@@ -81,7 +81,7 @@
         <a-camera look-controls="pointerLockEnabled: true" wasd-controls>
           <a-cursor color="#4e9a06" fuse="false" raycaster="objects: .clickable"></a-cursor>
           <a-entity class="clickable" id="exit-btn-hud" position="1.6 -0.9 -2" geometry="primitive: plane; width: 0.4; height: 0.15" material="color: #111; opacity: 0.9" onclick="window.location.href='../'">
-            <a-text value="EXIT VR" align="center" color="#4e9a06" width="1.2" font="#font-pressstart"></a-text>
+            <a-text value="EXIT VR" align="center" color="#4e9a06" width="1.2" font="monoid"></a-text>
           </a-entity>
         </a-camera>
         <a-entity laser-controls="hand: left" thumbstick-scroll raycaster="objects: .clickable; far: 10; showLine: true;"></a-entity>
@@ -90,74 +90,75 @@
 
       <a-entity id="kiosk" position="0 2.5 -5" scale="2 2 2">
         <!-- Header -->
-        <a-entity id="header-section" position="0 1.9 0.2">
+        <a-entity id="header-section" position="0 1.9 0.25">
           <a-image src="#hero-img" width="6" height="1.2" position="0 0 -0.05" pixelated opacity="1" material="shader: flat"></a-image>
           <a-plane color="#4e9a06" width="6" height="0.05" position="0 -0.6 0.01"></a-plane>
-          <a-image src="#logo-img" width="1.6" height="0.4" position="0 0.1 0.01" pixelated transparent="true" shader="flat"></a-image>
-          <a-text value="OFFICIAL DEVELOPER PORTAL" align="center" position="0 -0.2 0.01" color="#fff" width="2.5" font="#font-pressstart"></a-text>
+          <a-image src="#logo-img" width="1.6" height="0.4" position="0 0.1 0" pixelated transparent="true" shader="flat"></a-image>
+          <a-text value="OFFICIAL DEVELOPER PORTAL" align="center" position="0 -0.2 0" color="#fff" width="2.5" font="monoid"></a-text>
         </a-entity>
 
         <!--Navbar -->
-        <a-entity id="navbar-section" position="0 1.25 0.2">
+        <a-entity id="navbar-section" position="0 1.25 0.25">
           <a-plane color="#111" width="6" height="0.3" position="0 0 0" material="shader: flat"></a-plane>
           <a-plane color="#3a7304" width="6" height="0.03" position="0 -0.15 0.01"></a-plane>
-          <a-entity class="clickable nav-btn" data-target="home" position="-2 0 0.05" geometry="primitive: plane; width: 0.8; height: 0.28" material="color: #4e9a06; shader: flat"><a-text value="HOME" align="center" color="#fff" width="2.2" font="#font-pressstart"></a-text></a-entity>
-          <a-entity class="clickable nav-btn" data-target="assets" position="-0.7 0 0.05" geometry="primitive: plane; width: 0.9; height: 0.28" material="color: #333; shader: flat"><a-text value="TEXTURES" align="center" color="#fff" width="2.2" font="#font-pressstart"></a-text></a-entity>
-          <a-entity class="clickable nav-btn" data-target="coding" position="0.7 0 0.05" geometry="primitive: plane; width: 0.9; height: 0.28" material="color: #333; shader: flat"><a-text value="DEV LOG" align="center" color="#fff" width="2.2" font="#font-pressstart"></a-text></a-entity>
-          <a-entity class="clickable nav-btn" data-target="about" position="2 0 0.05" geometry="primitive: plane; width: 0.8; height: 0.28" material="color: #333; shader: flat"><a-text value="ABOUT" align="center" color="#fff" width="2.2" font="#font-pressstart"></a-text></a-entity>
+          <a-entity class="clickable nav-btn" data-target="home" position="-2 0 0.05" geometry="primitive: plane; width: 0.8; height: 0.28" material="color: #4e9a06; shader: flat"><a-text value="HOME" align="center" color="#fff" width="2.2" font="monoid"></a-text></a-entity>
+          <a-entity class="clickable nav-btn" data-target="assets" position="-0.7 0 0.05" geometry="primitive: plane; width: 0.9; height: 0.28" material="color: #333; shader: flat"><a-text value="TEXTURES" align="center" color="#fff" width="2.2" font="monoid"></a-text></a-entity>
+          <a-entity class="clickable nav-btn" data-target="coding" position="0.7 0 0.05" geometry="primitive: plane; width: 0.9; height: 0.28" material="color: #333; shader: flat"><a-text value="DEV LOG" align="center" color="#fff" width="2.2" font="monoid"></a-text></a-entity>
+          <a-entity class="clickable nav-btn" data-target="about" position="2 0 0.05" geometry="primitive: plane; width: 0.8; height: 0.28" material="color: #333; shader: flat"><a-text value="ABOUT" align="center" color="#fff" width="2.2" font="monoid"></a-text></a-entity>
         </a-entity>
 
-        <!-- Content -->
+        <!-- Content Area -->
         <a-entity id="content-section" position="0 -0.45 0">
-          <a-plane color="#2d2d2d" width="6" height="3.2" position="0 0 -0.1"></a-plane>
+          <a-plane color="#2d2d2d" width="6" height="3.2" position="0 0 -0.1" material="shader: flat"></a-plane>
 
           <!-- HOME -->
           <a-entity id="panel-home" class="panel" visible="true">
-            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="THE ART OF THE PIXEL" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="#font-pressstart"></a-text></a-entity>
-            <a-text value="Redactedcraft is an experimental voxel project focused on performance and aesthetic clarity. Built from scratch in C# using MonoGame." align="center" position="0 0.8 0" color="#f0f0f0" width="5.2" wrap-count="60" font="#font-vt323"></a-text>
+            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="THE ART OF THE PIXEL" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="monoid"></a-text></a-entity>
+            <a-text value="Redactedcraft is an experimental voxel project focused on performance and aesthetic clarity. Built from scratch in C# using MonoGame." align="center" position="0 0.8 0" color="#f0f0f0" width="5.2" wrap-count="60" font="monoid"></a-text>
             <a-entity position="0 -0.3 0">
-               <a-entity position="-1.8 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="INFINITE TERRAIN" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="#font-pressstart"></a-text><a-text value="Procedural noise\ngeneration." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="#font-vt323"></a-text></a-entity>
-               <a-entity position="0 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="GREEDY MESHING" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="#font-pressstart"></a-text><a-text value="Optimized GPU\nrendering." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="#font-vt323"></a-text></a-entity>
-               <a-entity position="1.8 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="EOS MULTIPLAYER" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="#font-pressstart"></a-text><a-text value="Robust P2P\nnetworking." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="#font-vt323"></a-text></a-entity>
+               <a-entity position="-1.8 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="INFINITE TERRAIN" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="monoid"></a-text><a-text value="Procedural noise generation." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="monoid"></a-text></a-entity>
+               <a-entity position="0 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="GREEDY MESHING" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="monoid"></a-text><a-text value="Optimized GPU rendering." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="monoid"></a-text></a-entity>
+               <a-entity position="1.8 0 0"><a-plane color="#111" width="1.6" height="1.4"></a-plane><a-text value="EOS MULTIPLAYER" align="center" position="0 0.5 0.01" color="#e9b96e" width="3" font="monoid"></a-text><a-text value="Robust P2P networking." align="center" position="0 -0.1 0.01" color="#ccc" width="2.4" font="monoid"></a-text></a-entity>
             </a-entity>
-            <a-entity class="clickable" position="0 -1.3 0" geometry="primitive: plane; width: 3; height: 0.35" material="color: #4e9a06" onclick="window.open('https://github.com/Redactedcraft/Redactedcraft/releases/latest', '_blank')"><a-text value="DOWNLOAD GAME" align="center" color="#fff" width="4" font="#font-pressstart"></a-text></a-entity>
+            <a-entity class="clickable" position="0 -1.3 0" geometry="primitive: plane; width: 3; height: 0.35" material="color: #4e9a06" onclick="window.open('https://github.com/Redactedcraft/Redactedcraft/releases/latest', '_blank')"><a-text value="DOWNLOAD GAME" align="center" color="#fff" width="4" font="monoid"></a-text></a-entity>
           </a-entity>
 
           <!-- TEXTURES -->
           <a-entity id="panel-assets" class="panel" visible="false">
-            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="STANDARD BLOCK LIBRARY" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="#font-pressstart"></a-text></a-entity>
+            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="STANDARD BLOCK LIBRARY" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="monoid"></a-text></a-entity>
             <a-entity id="block-grid" position="-1.5 0 0"></a-entity>
             <a-entity id="inspector" position="1.6 -0.1 0">
               <a-plane color="#111" width="2.4" height="2.6" position="0 0 -0.05"></a-plane>
-              <a-text id="ins-name" value="GRASS" align="center" position="0 1.1 0.01" color="#e9b96e" width="4" font="#font-pressstart"></a-text>
+              <a-text id="ins-name" value="GRASS" align="center" position="0 1.1 0.01" color="#e9b96e" width="4" font="monoid"></a-text>
               <a-entity id="ins-block-parent" position="0 0.1 0.5" animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear"><a-entity id="ins-block" voxel-block="src: ../assets/img/grass.png; size: 1"></a-entity></a-entity>
-              <a-text id="ins-desc" value="Lush greenery for the surface layer." align="center" position="0 -1 0.01" color="#ccc" width="2.8" wrap-count="35" font="#font-vt323"></a-text>
+              <a-text id="ins-desc" value="Lush greenery for the surface layer." align="center" position="0 -1 0.01" color="#ccc" width="2.8" wrap-count="35" font="monoid"></a-text>
             </a-entity>
           </a-entity>
 
           <!-- DEV LOG -->
           <a-entity id="panel-coding" class="panel" visible="false">
-            <a-entity id="log-title-area" position="0 1.3 0.15">
-               <a-plane color="#2d2d2d" width="5.8" height="0.5" position="0 0 -0.01"></a-plane>
-               <a-entity class="clickable sub-nav-btn active" data-log="game" position="-1.5 0 0.02" geometry="primitive: plane; width: 1.5; height: 0.3" material="color: #4e9a06"><a-text value="GAME UPDATES" align="center" color="#fff" width="2.5" font="#font-pressstart"></a-text></a-entity>
-               <a-entity class="clickable sub-nav-btn" data-log="website" position="0.5 0 0.02" geometry="primitive: plane; width: 1.8; height: 0.3" material="color: #333"><a-text value="WEBSITE UPDATES" align="center" color="#fff" width="2.5" font="#font-pressstart"></a-text></a-entity>
+            <a-entity id="log-title-area" position="0 1.3 0.2">
+               <a-plane color="#2d2d2d" width="5.8" height="0.5" position="0 0 -0.01" material="shader: flat"></a-plane>
+               <a-entity class="clickable sub-nav-btn active" data-log="game" position="-1.5 0 0.02" geometry="primitive: plane; width: 1.5; height: 0.3" material="color: #4e9a06; shader: flat"><a-text value="GAME UPDATES" align="center" color="#fff" width="2.5" font="monoid"></a-text></a-entity>
+               <a-entity class="clickable sub-nav-btn" data-log="website" position="0.5 0 0.02" geometry="primitive: plane; width: 1.8; height: 0.3" material="color: #333; shader: flat"><a-text value="WEBSITE UPDATES" align="center" color="#fff" width="2.5" font="monoid"></a-text></a-entity>
             </a-entity>
             <a-entity id="log-viewport" position="0 0.2 0">
                <a-entity id="log-scroller">
                  <a-image id="log-banner" src="#screenshots-bg" width="4" height="1.5" position="0 0.5 0.01" pixelated visible="false"></a-image>
-                 <a-text id="log-text" align="left" position="-2.6 -0.2 0.01" color="#f0f0f0" width="5.2" wrap-count="60" font="#font-vt323"></a-text>
+                 <a-entity id="log-content-parent" position="-2.6 -0.2 0.01"></a-entity>
                </a-entity>
             </a-entity>
-            <a-entity id="scroll-ui" position="2.7 0 0.05">
-              <a-entity class="clickable scroll-btn" data-dir="1" position="0 0.4 0" geometry="primitive: triangle; vertexA: 0 0.12 0; vertexB: -0.12 -0.12 0; vertexC: 0.12 -0.12 0" material="color: #4e9a06"></a-entity>
-              <a-entity class="clickable scroll-btn" data-dir="-1" position="0 -0.4 0" geometry="primitive: triangle; vertexA: 0 -0.12 0; vertexB: 0.12 0.12 0; vertexC: -0.12 0.12 0" material="color: #4e9a06"></a-entity>
+            <a-entity id="scroll-ui" position="2.7 0 0.3">
+              <a-entity class="clickable scroll-btn" data-dir="1" position="0 0.4 0" geometry="primitive: triangle; vertexA: 0 0.12 0; vertexB: -0.12 -0.12 0; vertexC: 0.12 -0.12 0" material="color: #4e9a06; shader: flat"></a-entity>
+              <a-entity class="clickable scroll-btn" data-dir="-1" position="0 -0.4 0" geometry="primitive: triangle; vertexA: 0 -0.12 0; vertexB: 0.12 0.12 0; vertexC: -0.12 0.12 0" material="color: #4e9a06; shader: flat"></a-entity>
             </a-entity>
           </a-entity>
 
           <!-- ABOUT -->
           <a-entity id="panel-about" class="panel" visible="false">
-            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="SOLO DEVELOPMENT" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="#font-pressstart"></a-text></a-entity>
-            <a-text value="Redactedcraft is a passion project developed entirely solo. The goal is to build a modern, high-performance foundation for voxel games that respects the retro aesthetic." align="center" position="0 0.2 0" color="#f0f0f0" width="5" wrap-count="50" font="#font-vt323"></a-text>
+            <a-image src="#profile-bg" width="5.8" height="3" position="0 0 -0.05" opacity="0.3" pixelated></a-image>
+            <a-entity position="-2.6 1.3 0"><a-plane color="#4e9a06" width="0.1" height="0.4" position="-0.1 0 0"></a-plane><a-text value="SOLO DEVELOPMENT" align="left" position="0.1 0 0" color="#e9b96e" width="5" font="monoid"></a-text></a-entity>
+            <a-text value="Redactedcraft is a passion project developed entirely solo. The goal is to build a modern, high-performance foundation for voxel games that respects the retro aesthetic." align="center" position="0 0.2 0" color="#f0f0f0" width="5" wrap-count="50" font="monoid"></a-text>
           </a-entity>
         </a-entity>
       </a-entity>
@@ -181,19 +182,48 @@
 
       const logs = {
         game: [
-          "JAN 12: Restoring Order: EOS Fixes & Repo Cleanup\n- Strictly using eos-service.onrender.com\n- Added automatic credential fallback",
-          "JAN 11: Developer Update: Pro Build Tools\n- Unified Build GUI implemented\n- Automated publishing support",
-          "JAN 10: Asset Restoration: Screenshots Background\n- Fixed missing environmental backdrop",
-          "DEC 20: World: Greedy Meshing Optimization\n- 400% performance increase",
-          "DEC 01: Project Start: MonoGame Migration\n- Transitioned to modern C# foundation"
+          { title: "Wrench Icon Restoring Order: EOS Fixes", body: "- Strictly using eos-service.onrender.com\n- Added automatic credential fallback\n- Removed sensitive SDK tools" },
+          { title: "Hammer Icon Developer Update: Pro Build Tools", body: "- Unified Build GUI implemented\n- Automated single-file publishing\n- Simplified source distribution" },
+          { title: "Broom Icon Launcher: Legacy Cleanup", body: "- Removed deprecated atlas requirement\n- Fixed legacy URL issues\n- Improved sync logic" },
+          { title: "Bolt Icon Launcher: Smart Asset Sync", body: "- Faster startup via GitHub API checks\n- Improved launcher UX" },
+          { title: "Satellite Icon Multiplayer: EOS Integration", body: "- Cross-platform P2P networking enabled\n- Seamless lobby management" },
+          { title: "Map Icon World: Greedy Meshing", body: "- 400% performance increase in terrain rendering" },
+          { title: "Rocket Icon Project Start: MonoGame Migration", body: "- Transitioned to modern C# foundation" }
         ],
         website: [
-          "JAN 12: New Feature: WebXR VR Portal\n- Meta Quest users can now enter immersive room",
-          "JAN 12: UX: Mobile 3D Model Support\n- Optimized block inspector for touch",
-          "JAN 11: Legal Infrastructure: Privacy & Terms\n- Added styled legal transparency pages",
-          "JAN 10: 3D Model Inspector Integration\n- Real-time Three.js preview enabled"
+          { title: "Goggles Icon New Feature: WebXR VR Portal", body: "- Meta Quest users rejoice!\n- Implemented immersive virtual kiosk" },
+          { title: "Mobile Icon UX: Mobile 3D Model Support", body: "- Optimized block inspector for touch\n- Full feature parity for mobile browsers" },
+          { title: "Scale Icon Legal Infrastructure: Privacy & Terms", body: "- Added essential transparency pages\n- Styled legal compliant foundation" },
+          { title: "Palette Icon Visual Identity & Tabbed Layout", body: "- Completely revamped site architecture\n- Dedicated spaces for asset browsing" },
+          { title: "Search Icon 3D Model Inspector Integration", body: "- Real-time Three.js preview enabled\n- High-fidelity texture mapping" }
         ]
       };
+
+      function renderLogs(type) {
+        const container = document.getElementById('log-content-parent');
+        container.innerHTML = '';
+        let offset = 0;
+        logs[type].forEach(log => {
+          const entry = document.createElement('a-entity');
+          entry.setAttribute('position', `0 ${offset} 0`);
+          const t = document.createElement('a-text');
+          t.setAttribute('value', log.title);
+          t.setAttribute('color', '#e9b96e');
+          t.setAttribute('width', '5');
+          t.setAttribute('font', 'monoid');
+          const b = document.createElement('a-text');
+          b.setAttribute('value', log.body);
+          b.setAttribute('position', '0.2 -0.4 0');
+          b.setAttribute('color', '#ccc');
+          b.setAttribute('width', '4.5');
+          b.setAttribute('font', 'monoid');
+          b.setAttribute('wrap-count', '50');
+          entry.appendChild(t);
+          entry.appendChild(b);
+          container.appendChild(entry);
+          offset -= 1.2;
+        });
+      }
 
       const grid = document.getElementById('block-grid');
       textures.forEach((b, i) => {
@@ -231,12 +261,12 @@
           document.querySelectorAll('.sub-nav-btn').forEach(b => b.setAttribute('material', 'color', '#333'));
           btn.setAttribute('material', 'color', '#4e9a06');
           const type = btn.getAttribute('data-log');
-          document.getElementById('log-text').setAttribute('value', logs[type].join('\n\n'));
+          renderLogs(type);
           document.getElementById('log-banner').setAttribute('visible', type === 'game');
           scrollY = 0; applyScroll(0);
         });
       });
-      document.getElementById('log-text').setAttribute('value', logs.game.join('\n\n'));
+      renderLogs('game');
 
       document.querySelectorAll('.scroll-btn').forEach(btn => btn.addEventListener('click', () => applyScroll(parseInt(btn.getAttribute('data-dir')))));
       window.addEventListener('wheel', (e) => { if (document.getElementById('panel-coding').getAttribute('visible')) applyScroll(e.deltaY > 0 ? 0.2 : -0.2); });
