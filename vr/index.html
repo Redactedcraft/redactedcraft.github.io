@@ -5,171 +5,212 @@
     <title>RedactedCraft VR | Official Site</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.3.2/dist/aframe-environment-component.min.js"></script>
+    <script>
+      // Custom component to handle the 3x2 Voxel Texture Atlas
+      AFRAME.registerComponent('voxel-block', {
+        schema: {
+          src: {type: 'map'},
+          size: {default: 1}
+        },
+        init: function () {
+          this.el.setAttribute('geometry', {
+            primitive: 'box',
+            width: this.data.size,
+            height: this.data.size,
+            depth: this.data.size
+          });
+        },
+        update: function () {
+          const mesh = this.el.getObject3D('mesh');
+          if (!mesh) return;
+
+          const loader = new THREE.TextureLoader();
+          loader.load(this.data.src, (texture) => {
+            texture.magFilter = THREE.NearestFilter;
+            texture.minFilter = THREE.NearestFilter;
+            
+            const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+            mesh.material = material;
+
+            const geometry = mesh.geometry;
+            const uvAttr = geometry.attributes.uv;
+
+            // Tile indices from CubeNetAtlas mapping (3 columns, 2 rows)
+            const tiles = [
+                {x: 1, y: 0}, // PosX (+x) - Right
+                {x: 1, y: 1}, // NegX (-x) - Left
+                {x: 0, y: 0}, // PosY (+y) - Top
+                {x: 2, y: 0}, // NegY (-y) - Bottom
+                {x: 0, y: 1}, // PosZ (+z) - Front
+                {x: 2, y: 1}  // NegZ (-z) - Back
+            ];
+
+            for (let i = 0; i < 6; i++) {
+                const u0 = tiles[i].x / 3;
+                const v0 = 1 - (tiles[i].y + 1) / 2;
+                const u1 = (tiles[i].x + 1) / 3;
+                const v1 = 1 - tiles[i].y / 2;
+
+                const eps = 0.001;
+                const su0 = u0 + eps, sv0 = v0 + eps, su1 = u1 - eps, sv1 = v1 - eps;
+
+                const base = i * 4;
+                uvAttr.setXY(base,     su0, sv1);
+                uvAttr.setXY(base + 1, su1, sv1);
+                uvAttr.setXY(base + 2, su0, sv0);
+                uvAttr.setXY(base + 3, su1, sv0);
+            }
+            uvAttr.needsUpdate = true;
+          });
+        }
+      });
+    </script>
+    <style>
+      .a-enter-vr-button { background-color: #4e9a06 !important; }
+    </style>
   </head>
   <body>
     <a-scene renderer="antialias: true; colorManagement: true;">
       
       <a-assets>
-        <!-- Site Branding -->
         <img id="logo-img" src="../assets/img/logo.png" crossorigin="anonymous">
         <img id="hero-img" src="../assets/img/hero_bg.png" crossorigin="anonymous">
-        
-        <!-- Block Textures -->
-        <img id="grass" src="../assets/img/grass.png" crossorigin="anonymous">
-        <img id="dirt" src="../assets/img/dirt.png" crossorigin="anonymous">
-        <img id="stone" src="../assets/img/stone.png" crossorigin="anonymous">
-        <img id="sand" src="../assets/img/sand.png" crossorigin="anonymous">
-        <img id="wood" src="../assets/img/wood.png" crossorigin="anonymous">
-        <img id="leaves" src="../assets/img/leaves.png" crossorigin="anonymous">
-        <img id="water" src="../assets/img/water.png" crossorigin="anonymous">
-        <img id="diamond" src="../assets/img/diamond.png" crossorigin="anonymous">
-        <img id="iron" src="../assets/img/iron.png" crossorigin="anonymous">
-        <img id="gold" src="../assets/img/gold.png" crossorigin="anonymous">
-        <img id="plank" src="../assets/img/plank.png" crossorigin="anonymous">
-        <img id="glass" src="../assets/img/glass.png" crossorigin="anonymous">
+        <img id="stone-tex" src="../assets/img/stone.png" crossorigin="anonymous">
       </a-assets>
 
-      <!-- Voxel Environment -->
+      <!-- Dynamic Environment -->
       <a-entity environment="preset: pixel; seed: 42; dressingAmount: 50; grid: dots; groundColor: #222; skyColor: #111; horizonColor: #333;"></a-entity>
 
-      <a-entity id="rig" position="0 0 4">
+      <!-- Rig with Movement Controls -->
+      <a-entity id="rig" position="0 0 6">
         <a-camera look-controls wasd-controls>
           <a-cursor color="#4e9a06" fuse="false" raycaster="objects: .clickable"></a-cursor>
           
-          <!-- Persistent HUD Exit -->
+          <!-- HUD Exit -->
           <a-entity class="clickable" id="exit-btn-hud" 
-                    position="0.9 -0.5 -1" 
-                    geometry="primitive: plane; width: 0.25; height: 0.08" 
+                    position="1.2 -0.7 -1.5" 
+                    geometry="primitive: plane; width: 0.3; height: 0.1" 
                     material="color: #1a1a1a; opacity: 0.9"
                     onclick="window.location.href='../'">
-            <a-text value="EXIT VR" align="center" color="#4e9a06" width="0.8" font="monoid"></a-text>
+            <a-text value="EXIT VR" align="center" color="#4e9a06" width="1" font="monoid"></a-text>
           </a-entity>
         </a-camera>
+        <!-- Controller Movement -->
         <a-entity laser-controls="hand: left" raycaster="objects: .clickable; far: 10; showLine: true;"></a-entity>
         <a-entity laser-controls="hand: right" raycaster="objects: .clickable; far: 10; showLine: true;"></a-entity>
       </a-entity>
 
-      <!-- The "Virtual Website" Screen -->
-      <a-entity id="virtual-website" position="0 1.6 -3" scale="1.2 1.2 1.2">
+      <!-- The Large VR Screen -->
+      <a-entity id="virtual-website" position="0 2.5 -4" scale="1.5 1.5 1.5">
         
-        <!-- Header (Exactly like Site) -->
-        <a-entity id="header" position="0 1.2 0">
-           <a-image src="#hero-img" width="4" height="1.2" position="0 0 -0.05" opacity="0.9"></a-image>
-           <a-plane color="#000" width="4" height="1.2" position="0 0 -0.1"></a-plane> <!-- Border -->
-           <a-image src="#logo-img" width="1.5" height="0.4" position="0 0.2 0" transparent="true"></a-image>
-           <a-text value="OFFICIAL DEVELOPER PORTAL" align="center" position="0 -0.2 0" color="#fff" width="2" font="monoid"></a-text>
+        <!-- Header -->
+        <a-entity id="header" position="0 1.5 0">
+           <a-image src="#hero-img" width="5" height="1.4" position="0 0 -0.1" opacity="0.9"></a-image>
+           <a-plane color="#000" width="5.1" height="1.5" position="0 0 -0.15"></a-plane> 
+           <a-image src="#logo-img" width="2" height="0.5" position="0 0.3 0" transparent="true"></a-image>
+           <a-text value="OFFICIAL DEVELOPER PORTAL" align="center" position="0 -0.2 0" color="#fff" width="2.5" font="monoid"></a-text>
         </a-entity>
 
-        <!-- Navigation Bar (Exactly like Site) -->
-        <a-entity id="navbar" position="0 0.5 0">
-           <a-plane color="#111" width="4" height="0.25" position="0 0 -0.02"></a-plane>
-           <a-entity class="clickable nav-btn" data-target="home" position="-1.5 0 0" geometry="primitive: plane; width: 0.6; height: 0.2" material="color: #4e9a06">
-             <a-text value="HOME" align="center" color="#fff" width="1.8" font="monoid"></a-text>
+        <!-- Navigation -->
+        <a-entity id="navbar" position="0 0.7 0">
+           <a-plane color="#111" width="5" height="0.3" position="0 0 -0.05"></a-plane>
+           <a-entity class="clickable nav-btn" data-target="home" position="-1.8 0 0" geometry="primitive: plane; width: 0.8; height: 0.25" material="color: #4e9a06">
+             <a-text value="HOME" align="center" color="#fff" width="2"></a-text>
            </a-entity>
-           <a-entity class="clickable nav-btn" data-target="assets" position="-0.75 0 0" geometry="primitive: plane; width: 0.6; height: 0.2" material="color: #333">
-             <a-text value="TEXTURES" align="center" color="#fff" width="1.8" font="monoid"></a-text>
+           <a-entity class="clickable nav-btn" data-target="assets" position="-0.6 0 0" geometry="primitive: plane; width: 0.8; height: 0.25" material="color: #333">
+             <a-text value="TEXTURES" align="center" color="#fff" width="2"></a-text>
            </a-entity>
-           <a-entity class="clickable nav-btn" data-target="lore" position="0 0 0" geometry="primitive: plane; width: 0.6; height: 0.2" material="color: #333">
-             <a-text value="LORE" align="center" color="#fff" width="1.8" font="monoid"></a-text>
+           <a-entity class="clickable nav-btn" data-target="lore" position="0.6 0 0" geometry="primitive: plane; width: 0.8; height: 0.25" material="color: #333">
+             <a-text value="LORE" align="center" color="#fff" width="2"></a-text>
            </a-entity>
-           <a-entity class="clickable nav-btn" data-target="coding" position="0.75 0 0" geometry="primitive: plane; width: 0.6; height: 0.2" material="color: #333">
-             <a-text value="DEV LOG" align="center" color="#fff" width="1.8" font="monoid"></a-text>
-           </a-entity>
-           <a-entity class="clickable nav-btn" data-target="about" position="1.5 0 0" geometry="primitive: plane; width: 0.6; height: 0.2" material="color: #333">
-             <a-text value="ABOUT" align="center" color="#fff" width="1.8" font="monoid"></a-text>
+           <a-entity class="clickable nav-btn" data-target="coding" position="1.8 0 0" geometry="primitive: plane; width: 0.8; height: 0.25" material="color: #333">
+             <a-text value="DEV LOG" align="center" color="#fff" width="2"></a-text>
            </a-entity>
         </a-entity>
 
-        <!-- Content Panels (Replicating Site Tabs) -->
-        <a-entity id="panels" position="0 -0.6 0">
+        <!-- Content Area -->
+        <a-entity id="panels" position="0 -1 0">
           
-          <!-- HOME TAB -->
+          <!-- HOME -->
           <a-entity id="panel-home" class="panel" visible="true">
-            <a-plane color="#1a1a1a" width="4" height="2" position="0 0 -0.05"></a-plane>
-            <a-text value="THE ART OF THE PIXEL" align="center" position="0 0.8 0" color="#e9b96e" width="4"></a-text>
-            <a-text value="Redactedcraft is an experimental voxel project focused on performance and aesthetic clarity. Built from scratch in C# using MonoGame." 
-                    align="center" position="0 0.5 0" color="#f0f0f0" width="3.5" wrap-count="50"></a-text>
+            <a-plane color="#1a1a1a" width="5" height="3" position="0 0 -0.1"></a-plane>
+            <a-text value="REDACTEDCRAFT" align="center" position="0 1.2 0" color="#4e9a06" width="6"></a-text>
+            <a-text value="EXPERIMENTAL VOXEL ENGINE" align="center" position="0 0.9 0" color="#e9b96e" width="4"></a-text>
+            <a-text value="Redactedcraft pushes solo-dev limits with a custom C# MonoGame engine." align="center" position="0 0.5 0" color="#ccc" width="4" wrap-count="40"></a-text>
             
-            <!-- Cards Replicas -->
-            <a-entity position="-1.2 -0.2 0">
-               <a-plane color="#2d2d2d" width="1" height="0.8"></a-plane>
-               <a-text value="INFINITE\nTERRAIN" align="center" position="0 0.2 0.01" color="#e9b96e" width="2"></a-text>
-               <a-text value="Procedural noise\ngeneration." align="center" position="0 -0.1 0.01" color="#ccc" width="1.5"></a-text>
-            </a-entity>
-            <a-entity position="0 -0.2 0">
-               <a-plane color="#2d2d2d" width="1" height="0.8"></a-plane>
-               <a-text value="GREEDY\nMESHING" align="center" position="0 0.2 0.01" color="#e9b96e" width="2"></a-text>
-               <a-text value="Optimized GPU\nrendering." align="center" position="0 -0.1 0.01" color="#ccc" width="1.5"></a-text>
-            </a-entity>
-            <a-entity position="1.2 -0.2 0">
-               <a-plane color="#2d2d2d" width="1" height="0.8"></a-plane>
-               <a-text value="EOS\nMULTIPLAYER" align="center" position="0 0.2 0.01" color="#e9b96e" width="2"></a-text>
-               <a-text value="Epic Online\nServices." align="center" position="0 -0.1 0.01" color="#ccc" width="1.5"></a-text>
-            </a-entity>
-
-            <a-entity class="clickable" position="0 -0.8 0.05" geometry="primitive: plane; width: 2.5; height: 0.2" material="color: #4e9a06">
-               <a-text value="DOWNLOAD GAME (LATEST)" align="center" color="#fff" width="2.5"></a-text>
+            <a-entity position="0 -0.5 0">
+              <a-entity class="clickable" geometry="primitive: plane; width: 3; height: 0.4" material="color: #4e9a06" onclick="window.open('https://github.com/Redactedcraft/Redactedcraft/releases/latest', '_blank')">
+                <a-text value="DOWNLOAD LATEST RELEASE" align="center" color="#fff" width="3"></a-text>
+              </a-entity>
             </a-entity>
           </a-entity>
 
-          <!-- TEXTURES TAB -->
+          <!-- TEXTURES (3D INSPECTOR REPLICA) -->
           <a-entity id="panel-assets" class="panel" visible="false">
-            <a-plane color="#1a1a1a" width="4" height="2" position="0 0 -0.05"></a-plane>
-            <a-text value="BLOCK LIBRARY" align="center" position="0 0.8 0" color="#e9b96e" width="4"></a-text>
-            <a-entity id="block-grid" position="0 0 0"></a-entity>
+            <a-plane color="#1a1a1a" width="5" height="3" position="0 0 -0.1"></a-plane>
+            
+            <!-- Block Grid -->
+            <a-entity id="block-selection-grid" position="-1.5 0 0"></a-entity>
+
+            <!-- Inspector Area -->
+            <a-entity id="block-inspector" position="1.2 0 0">
+               <a-plane color="#111" width="1.8" height="2.5" position="0 0 -0.05"></a-plane>
+               <a-text id="inspector-name" value="SELECT A BLOCK" align="center" position="0 1 0" color="#e9b96e" width="3"></a-text>
+               
+               <!-- The 3D Block View -->
+               <a-entity id="preview-block-container" position="0 0 0.5" animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear">
+                  <a-entity id="inspector-block" voxel-block="src: ../assets/img/grass.png; size: 0.8"></a-entity>
+               </a-entity>
+
+               <a-entity class="clickable" position="0 -0.9 0" geometry="primitive: plane; width: 1.4; height: 0.25" material="color: #4e9a06">
+                  <a-text value="DOWNLOAD TEXTURE" align="center" color="#fff" width="2"></a-text>
+               </a-entity>
+            </a-entity>
           </a-entity>
 
-          <!-- LORE TAB -->
+          <!-- LORE -->
           <a-entity id="panel-lore" class="panel" visible="false">
-            <a-plane color="#1a1a1a" width="4" height="2" position="0 0 -0.05"></a-plane>
-            <a-text value="WORLD LORE" align="center" position="0 0.8 0" color="#e9b96e" width="4"></a-text>
-            <a-text value="The history of Redactedcraft is still being written.\nCheck back later for updates on the world's origins..." 
-                    align="center" position="0 0.2 0" color="#f0f0f0" width="3.5"></a-text>
+            <a-plane color="#1a1a1a" width="5" height="3" position="0 0 -0.1"></a-plane>
+            <a-text value="WORLD LORE" align="center" position="0 1.2 0" color="#e9b96e" width="5"></a-text>
+            <a-text value="History is written in the blocks.\nThe Great Redaction left only the voxels behind..." 
+                    align="center" position="0 0.5 0" color="#f0f0f0" width="4" wrap-count="40"></a-text>
           </a-entity>
 
-          <!-- DEV LOGTAB -->
+          <!-- DEV LOG -->
           <a-entity id="panel-coding" class="panel" visible="false">
-            <a-plane color="#1a1a1a" width="4" height="2" position="0 0 -0.05"></a-plane>
-            <a-text value="DEVELOPER LOGS" align="center" position="0 0.8 0" color="#e9b96e" width="4"></a-text>
-            <a-text id="vr-logs" value="" align="left" position="-1.8 0 0" color="#ccc" width="3" wrap-count="40"></a-text>
-          </a-entity>
-
-          <!-- ABOUT TAB -->
-          <a-entity id="panel-about" class="panel" visible="false">
-            <a-plane color="#1a1a1a" width="4" height="2" position="0 0 -0.05"></a-plane>
-            <a-text value="SOLO DEVELOPMENT" align="center" position="0 0.8 0" color="#e9b96e" width="4"></a-text>
-            <a-text value="Redactedcraft is a passion project developed entirely solo. The goal is to build a modern, high-performance foundation for voxel games that respects the retro aesthetic of the past." 
-                    align="center" position="0 0.3 0" color="#f0f0f0" width="3.5" wrap-count="45"></a-text>
+            <a-plane color="#1a1a1a" width="5" height="3" position="0 0 -0.1"></a-plane>
+            <a-text value="DEVELOPER LOGS" align="center" position="0 1.2 0" color="#e9b96e" width="5"></a-text>
+            <a-text id="vr-logs-content" value="" align="left" position="-2.2 0.8 0" color="#ccc" width="4.5" wrap-count="50"></a-text>
           </a-entity>
 
         </a-entity>
-
       </a-entity>
 
     </a-scene>
 
     <script>
       const blocks = [
-        'grass', 'dirt', 'stone', 'sand', 'wood', 'leaves', 'water', 'diamond',
-        'iron', 'gold', 'plank', 'glass'
+        'grass', 'dirt', 'stone', 'sand', 'gravel', 'wood', 'leaves', 'water',
+        'diamond', 'iron', 'gold', 'plank', 'glass', 'artificer_bench'
       ];
 
-      const logData = [
-        "JAN 12: EOS Fixes & Repo Cleanup",
-        "JAN 11: Pro Build Tools Released",
-        "JAN 10: Smart Asset Sync Implemented",
-        "JAN 05: EOS Multiplayer Integration",
-        "DEC 20: Greedy Meshing Optimization"
+      const logs = [
+        "JAN 12: EOS Fixes & Repo Cleanup - Fixed service connectivity.",
+        "JAN 11: Pro Build Tools Released - Automated publishing enabled.",
+        "JAN 10: Smart Asset Sync - Optimized launcher startup routine.",
+        "DEC 20: Greedy Meshing Optimization - 400% performance boost."
       ];
 
-      // Populate Block Grid (Mimicking Block Gallery)
-      const grid = document.getElementById('block-grid');
+      // Populate Block Grid
+      const grid = document.getElementById('block-selection-grid');
       blocks.forEach((id, i) => {
-        const x = (i % 6) * 0.6 - 1.5;
-        const y = Math.floor(i / 6) * -0.6 + 0.3;
+        const x = (i % 4) * 0.6 - 0.9;
+        const y = Math.floor(i / 4) * -0.6 + 0.9;
         
         const item = document.createElement('a-entity');
-        item.setAttribute('position', `${x} ${y} 0.01`);
+        item.setAttribute('position', `${x} ${y} 0.05`);
+        item.setAttribute('class', 'clickable block-select-btn');
+        item.setAttribute('data-id', id);
         
         const plane = document.createElement('a-plane');
         plane.setAttribute('width', '0.5');
@@ -177,49 +218,43 @@
         plane.setAttribute('material', 'color: #333');
         
         const img = document.createElement('a-image');
-        img.setAttribute('src', `#${id}`);
-        img.setAttribute('width', '0.4');
-        img.setAttribute('height', '0.4');
-        img.setAttribute('position', '0 0.05 0.01');
-        
-        const label = document.createElement('a-text');
-        label.setAttribute('value', id.toUpperCase());
-        label.setAttribute('align', 'center');
-        label.setAttribute('position', '0 -0.2 0.01');
-        label.setAttribute('width', '1');
-        label.setAttribute('color', '#e9b96e');
+        img.setAttribute('src', `../assets/img/${id}.png`);
+        img.setAttribute('width', '0.45');
+        img.setAttribute('height', '0.45');
+        img.setAttribute('position', '0 0 0.01');
         
         item.appendChild(plane);
         item.appendChild(img);
-        item.appendChild(label);
         grid.appendChild(item);
+
+        item.addEventListener('click', () => {
+          document.getElementById('inspector-name').setAttribute('value', id.toUpperCase());
+          document.getElementById('inspector-block').setAttribute('voxel-block', 'src', `../assets/img/${id}.png`);
+        });
       });
 
       // Populate Logs
-      document.getElementById('vr-logs').setAttribute('value', logData.join('\n\n'));
+      document.getElementById('vr-logs-content').setAttribute('value', logs.join('\n\n'));
 
-      // Navigation Logic (Exactly like openTab)
+      // Navigation
       document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const target = btn.getAttribute('data-target');
-          
-          // Toggle Visual Active State
           document.querySelectorAll('.nav-btn').forEach(b => b.setAttribute('material', 'color', '#333'));
           btn.setAttribute('material', 'color', '#4e9a06');
-          
-          // Toggle Panels
           document.querySelectorAll('.panel').forEach(p => p.setAttribute('visible', 'false'));
           document.getElementById('panel-' + target).setAttribute('visible', 'true');
         });
       });
 
-      // Unified Click Handling
+      // Global Link Handler
       document.querySelectorAll('.clickable').forEach(el => {
         el.addEventListener('click', () => {
           const clickAttr = el.getAttribute('onclick');
-          if (clickAttr && clickAttr.includes('window.location')) {
-            const url = clickAttr.match(/'([^']+)'/)[1];
-            window.location.href = url;
+          if (clickAttr && clickAttr.includes('window')) {
+             const url = clickAttr.match(/'([^']+)'/)[1];
+             if (clickAttr.includes('open')) window.open(url, '_blank');
+             else window.location.href = url;
           }
         });
       });
